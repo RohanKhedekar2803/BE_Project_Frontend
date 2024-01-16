@@ -1,0 +1,1 @@
+const WS_CONNECTION_KEY = 'ws_connection';
