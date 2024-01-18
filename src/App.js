@@ -1,7 +1,6 @@
-import logo from './logo.svg';
 import './App.css';
 import Login from './Components/Login';
-import Chat from './Screens/Chat';
+import Chat from './Components/Chat';
 import { BrowserRouter, Route, Routes, Switch } from 'react-router-dom';
 
 function App() {

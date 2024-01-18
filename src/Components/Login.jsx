@@ -6,13 +6,13 @@ import { UsernameContext } from '../Context/UsernameContext';
 const Login = () => {
     const navigate = useNavigate();
     const usercontext= useContext(UsernameContext)
-    console.log(usercontext.username)
+    
     const submitdata = (e) => {
         e.preventDefault();
-        
+        var user=usercontext.username
         const userObject = {
-            nickname: usercontext.nickname,
-            username: usercontext.username
+            senderId: user,
+            content: `user ${user} have joined the chat`
         };
 
         stompClient.send(
