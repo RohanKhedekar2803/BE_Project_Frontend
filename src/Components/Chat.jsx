@@ -1,15 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { stompClient, isStompConnected } from '../Constants/StompClient';
 import ChatWindow from './ChatWindow';
+import { UsernameContext } from '../Context/UsernameContext';
 
 const Chat = () => {
-  const [username, setUsername] = useState('rohan');
+  const usercontext= useContext(UsernameContext)
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [friendsList, setFriendsList] = useState([]);
-  const [connectedToStomp, setConnectedToStomp] = useState(false);
-  const [newMessages, setNewMessages] = useState([{"id":9,"chatId":null,"senderId":"jk","receiverId":"ALL","content":"user jk have joined the chat","timeStamp":1705600492696}
-
-]);
+  const [newMessages, setNewMessages] = useState([
+    {
+      "id": 9,
+      "chatId": null,
+      "senderId": "jk",
+      "receiverId": "ALL",
+      "content": "user jk has joined the chat",
+      "timeStamp": 1705600492696
+    }
+  ]);
 
   const handleFriendClick = (friend) => {
     setSelectedFriend(friend);
@@ -20,8 +27,14 @@ const Chat = () => {
   };
 
   const addNewMessage = (message) => {
-    setNewMessages((prevMessages) => [...prevMessages, message]);
+    // Check if the message with the same id already exists
+    const messageExists = newMessages.some((existingMessage) => existingMessage.id === message.id);
+
+    if (!messageExists) {
+      setNewMessages((prevMessages) => [...prevMessages, message]);
+    }
   };
+
 
   useEffect(() => {
     const getFriendsList = async () => {
@@ -40,8 +53,20 @@ const Chat = () => {
 
     const setupStompClient = () => {
       if (isStompConnected) {
-        stompClient.subscribe(`/user/${username}/queue/messages`, (message) => {
-          console.log(`Message received from /user/${username}/queue/messages:`, message);
+        
+        var user=usercontext.username
+        console.log(user)
+        stompClient.subscribe(`/users/${user}/queue/messages`, (frame) => {
+          console.log(`Message received from ${user}/queue/messages:`, frame);
+          
+          try {
+            const message = JSON.parse(frame.body);
+            console.log('Parsed JSON:', message);
+            addNewMessage(message);
+          } catch (error) {
+            console.error('Error parsing JSON:', error);
+          }
+          
         });
 
         stompClient.subscribe(`/users/topic`, (frame) => {
@@ -54,7 +79,6 @@ const Chat = () => {
           console.log('Message received', frame);
         };
 
-        
       } else {
         console.log('Waiting for Stomp connection...');
       }
@@ -62,7 +86,10 @@ const Chat = () => {
 
     getFriendsList();
     setupStompClient();
-  }, [username, stompClient, isStompConnected]);
+  }, [ stompClient, isStompConnected]);
+
+  // Convert Set to Array for rendering purposes
+  const messagesArray = [...newMessages];
 
   return (
     <div className="bg-gray-100 flex flex-col lg:flex-row">
@@ -83,7 +110,7 @@ const Chat = () => {
 
       <div className={`flex-1 p-4 ${selectedFriend ? 'w-full lg:w-3/4' : 'hidden lg:block'}`}>
         {selectedFriend && (
-          <ChatWindow selectedFriend={selectedFriend} messages={newMessages} handleBack={handleBack} />
+          <ChatWindow selectedFriend={selectedFriend} messages={messagesArray} handleBack={handleBack} />
         )}
       </div>
     </div>
