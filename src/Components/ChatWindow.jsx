@@ -2,12 +2,13 @@ import React, { useContext,useState } from 'react';
 import { UsernameContext } from '../Context/UsernameContext';
 import { stompClient} from '../Constants/StompClient';
 
-const ChatWindow = ({ selectedFriend, messages, handleBack }) => {
+const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
 
   const usercontext= useContext(UsernameContext)
   const [draftMessage,setDraftMessage]=useState('draft');
+  
   const sendMessage= () =>{
-    // console.log(selectedFriend + draftMessage)
+
     var user=usercontext.username
     const userObject = {
       senderId: user,
@@ -15,11 +16,19 @@ const ChatWindow = ({ selectedFriend, messages, handleBack }) => {
       content: draftMessage,
 
   };
-
+  const getTime=()=>{
+    const currentDate = new Date();
+    const indiaDateTime = currentDate.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+    const time = indiaDateTime.substring(10);
+    console.log('Current date and time in India:', time);
+    return time;
+  }
   stompClient.send(
       `/app/chat`,
       JSON.stringify(userObject),
       {});
+      userObject.timeStamp = getTime()
+      setMessages((prevMessages) => [...prevMessages, userObject]);
       console.log(userObject)
   }
   return (
@@ -32,13 +41,13 @@ const ChatWindow = ({ selectedFriend, messages, handleBack }) => {
             (
               <div
                 key={message.id}
-                className={message.senderId === 'You' ? 'flex items-end justify-end' : 'flex items-start'}
+                className={message.senderId === usercontext.username ? 'flex items-end justify-end' : 'flex items-start'}
               >
                 <div
-                  className={message.senderId === 'You' ? 'bg-blborder-black text-white rounded-lg p-2' : 'bg-gray-200 rounded-lg p-2'}
+                  className={message.senderId === usercontext.username ? 'bg-gray-200 rounded-lg p-2' : 'bg-gray-200 rounded-lg p-2'}
                 >
                   <p className="text-sm">{message.content}</p>
-                  <p className="text-xs text-gray-500">{`${message.senderId}, ${message.timeStamp}`}</p>
+                  <p className="text-xs text-gray-500 text-right">{`${message.senderId === usercontext.username ? 'You' : message.senderId}, ${message.timeStamp}`}</p>
                 </div>
               </div>
             )
