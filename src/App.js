@@ -1,7 +1,9 @@
 import './App.css';
-import Login from './Components/Login';
+// import Login from './Components/Login';
 import Chat from './Components/Chat';
 import { BrowserRouter, Route, Routes, Switch } from 'react-router-dom';
+import HomePage from './Components/HomePage';
+import Login from './Components/LoginPage';
 
 function App() {
   return (
@@ -10,7 +12,7 @@ function App() {
 
     <Routes>      
        <Route path="/" element={<Login />} />
-       <Route path='/chat' element={<Chat />} />
+       <Route path='/home' element={<HomePage />} />
     </Routes>
 </BrowserRouter>
     

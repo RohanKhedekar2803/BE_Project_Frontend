@@ -40,3 +40,102 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+
+
+/* antd css below */
+/* App.css */
+:root {
+  --main-bg-color-light: #fff;
+  --main-text-color-light: #001529;
+  --main-bg-color-dark: #001529;
+  --main-text-color-dark: #fff;
+}
+
+.site-layout {
+  transition: margin-left 0.3s;
+}
+
+.dark-theme {
+  background: var(--main-bg-color-dark);
+  color: var(--main-text-color-dark);
+}
+
+.light-theme {
+  background: var(--main-bg-color-light);
+  color: var(--main-text-color-light);
+  
+}
+
+.header {
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dark-theme .ant-layout .ant-layout-sider {
+  background-color: var(--sider-bg-color-dark);
+  color: var(--sider-text-color-dark);
+}
+
+.light-theme .ant-layout .ant-layout-sider {
+  background-color: var(--sider-bg-color-light);
+  color: var(--sider-text-color-light);
+}
+
+.logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left-content {
+  display: flex;
+  align-items: center;
+}
+
+.right-content {
+  margin-right: 16px;
+}
+
+/* LoginPage CSS */
+.login-navbar {
+  background-color: #2a1433;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  position: fixed;
+  width: 100%;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.navbar-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-button {
+  margin-right: 16px;
+}
+
+.login-button {
+  margin-left: 16px;
+}
+img {
+  width: 100%;
+}
