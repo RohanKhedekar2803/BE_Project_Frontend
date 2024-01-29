@@ -1,12 +1,18 @@
 import React from 'react';
 import { Layout, Button } from 'antd';
-
+import { useNavigate } from 'react-router-dom'
 const { Header, Content } = Layout;
 
 const Login = () => {
+
+  const navigate = useNavigate();
   const handleLogin = () => {
     console.log('Login button clicked');
   };
+
+  const handleRegister = () => {
+    navigate('/register')
+  }
 
   return (
     <Layout>
@@ -22,6 +28,9 @@ const Login = () => {
         </div>
         <Button style={{color: "pink" }} type="primary" onClick={handleLogin} className="login-button">
           Login
+        </Button>
+        <Button style={{color: "pink" }} type="primary" onClick={handleRegister} className="login-button">
+          Register
         </Button>
       </Header>
       <Content>
