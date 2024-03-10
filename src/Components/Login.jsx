@@ -30,7 +30,7 @@ const Login = () => {
 
     return (
         <div>
-
+            <h1>Hello {user.nickname} </h1>
             <button className="bg-blue-500 text-white rounded-md px-2 py-1 border border-blue-700" onClick={submitdata}>
                 Submit
             </button>

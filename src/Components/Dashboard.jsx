@@ -30,12 +30,13 @@ const Dashboard = () => {
 
     return (
         <div>
-            <div>
+            <h1>Hello</h1>
+            {/* <div>
                 <Sidebar/>
             </div>
             <div>
                 <Navbar />
-            </div>
+            </div> */}
             {/* <div>
                 <Cards />
             </div> */}

@@ -13,17 +13,6 @@ const initialState = {
 
 export const register = createAsyncThunk('auth/register', async(user, thunkAPI) => {
     try {
-<<<<<<< HEAD
-        const response = await axios.get(`https://api.github.com/users/${user.name}`)
-        .then(response => response.data)
-
-        if(response){
-            localStorage.setItem('user', JSON.stringify(response))
-        }
-
-        console.log(response)
-        return response
-=======
         // const response = await axios.get(`https://api.github.com/users/${user.name}`)
         // .then(response => response.data)
 
@@ -33,7 +22,6 @@ export const register = createAsyncThunk('auth/register', async(user, thunkAPI) 
 
         
         return user
->>>>>>> pranit2
     } catch (error) {
         const message = error.response && error.response.data && error.response.data.message || error.message || error.toString()
         return thunkAPI.rejectWithValue(message)
