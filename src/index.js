@@ -3,7 +3,11 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { Provider } from 'react-redux';
+<<<<<<< HEAD
 import { store } from './app/store';
+=======
+import { store } from './app/Store';
+>>>>>>> pranit2
 import reportWebVitals from './reportWebVitals';
 import { UsernameContext, UsernameProvider } from './Context/UsernameContext';
 

@@ -2,9 +2,12 @@ import React, { useState, useEffect,useContext } from 'react';
 import { stompClient, isStompConnected } from '../Constants/StompClient';
 import ChatWindow from './ChatWindow';
 import { UsernameContext } from '../Context/UsernameContext';
+import { useSelector } from 'react-redux'
 
 const Chat = () => {
   const usercontext= useContext(UsernameContext)
+  const { user, isError, isSuccess, isLoading, message } = useSelector((state) => state.auth)
+
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [friendsList, setFriendsList] = useState([]);
   const [newMessages, setNewMessages] = useState([
@@ -61,10 +64,10 @@ const Chat = () => {
     const setupStompClient = () => {
       if (isStompConnected) {
         
-        var user=usercontext.username
-        console.log(user)
-        stompClient.subscribe(`/users/${user}/queue/messages`, (frame) => {
-          console.log(`Message received from ${user}/queue/messages:`, frame);
+        var username = user.nickname
+        console.log(username)
+        stompClient.subscribe(`/users/${username}/queue/messages`, (frame) => {
+          console.log(`Message received from ${username}/queue/messages:`, frame);
           
           try {
             const message = JSON.parse(frame.body);
