@@ -4,6 +4,8 @@ import Chat from './Components/Chat';
 import { BrowserRouter, Route, Routes, Switch } from 'react-router-dom';
 import Register from './Components/Register';
 import Dashboard from './Components/Dashboard';
+import Challenge from './Components/Challenge';
+import CreateChallenge from './Components/CreateChallenge';
 
 
 function App() {
@@ -16,6 +18,10 @@ function App() {
        <Route path='/chat' element={<Chat />} />
        <Route path='/register' element={<Register />} />
        <Route path='/dashboard' element={<Dashboard />} />
+       <Route path='/challenge' element={<Challenge />} />
+       <Route path='/createchallenge' element={<CreateChallenge />} />
+       <Route path='/allchallenge' element={<Challenge />} />
+
     </Routes>
 </BrowserRouter>
     

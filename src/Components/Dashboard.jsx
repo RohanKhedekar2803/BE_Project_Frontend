@@ -1,69 +1,126 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { stompClient, isStompConnected } from '../Constants/StompClient';
+
 import Navbar from './Navbar';
 import Cards from './Cards';
 import Sidebar from './Sidebar';
+import { Fragment } from 'react'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import Pagination from './Pagination';
+import Spinner from './Spinner';
+
+
+
 
 
 const Dashboard = () => {
 
     const navigate = useNavigate();
-    const { user, isError, isSuccess, isLoading, message } = useSelector((state) => state.auth)
+    const { user } = useSelector((state) => state.auth)
+    const [repos, setRepos] = useState([]);
+    const [page, setPage] = useState(1);
 
-    const submitdata = (e) => {
-        e.preventDefault();
-        // var user=usercontext.username
-        var username = user.nickname
-        const userObject = {
-            senderId: username,
-            content: `user ${username} have joined the chat`
-        };
-
-        stompClient.send(
-            '/app/user.addUser',
-            JSON.stringify(userObject),
-            {});
-        navigate('/chat');
+    const nextPage = () => {
+        setPage(page + 1);
     };
 
+    const prevPage = () => {
+        if (page > 1) {
+            setPage(page - 1);
+        }
+    };
+
+    useEffect(() => {
+        const fetchData = async (page) => {
+            try {
+                const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=vk17-starlord&pageNo=${page}`, {
+                    hasLanguage: "",
+                    hasTopic: "",
+                });
+                console.log('Response:', response.data);
+                const dataArray = response.data.content;
+                setRepos(dataArray);
+                console.log("data: ", dataArray)
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData(page);
+    }, [page]);
+
+
+    // const submitdata = (e) => {
+    //     e.preventDefault();
+    //     // var user=usercontext.username
+    //     var username = user.nickname
+    //     const userObject = {
+    //         senderId: username,
+    //         content: `user ${username} have joined the chat`
+    //     };
+
+    //     stompClient.send(
+    //         '/app/user.addUser',
+    //         JSON.stringify(userObject),
+    //         {});
+    //     navigate('/chat');
+    // };
+
     return (
-        <div>
-            <h1>Hello</h1>
-            {/* <div>
-                <Sidebar/>
+        <>
+            {/*
+            This example requires updating your template:
+    
+            ```
+            <html class="h-full bg-gray-100">
+            <body class="h-full">
+            ```
+          */}
+            <div className="min-h-full bg-blue-100">
+
+
+
+                {
+                    repos ? (
+                    <div>
+                        <Navbar/>
+                        
+                <header className="bg-blue-100 shadow">
+                    <div className="max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Recommended Projects</h1>
+                    </div>
+                </header>
+                    <div className="bg-blue-100">
+                        {repos.map((item, index) => ( 
+                            <div key={index} className="mb-4">
+                                <Cards data={item} />
+                            </div>
+                        ))}
+                    </div>
+                    <Pagination nextPage={nextPage} prevPage={prevPage} /> 
+ 
+                    </div>
+                     ) : <Spinner/>
+                }
+                {/* <div className="bg-blue-100">
+                    {repos.map((item, index) => (
+                        <div key={index} className="mb-4">
+                            <Cards data={item} />
+                        </div>
+                    ))}
+                </div> */}
+
+                {/* <div className="flex justify-between mt-4">
+                    <button onClick={prevPage}>Previous Page</button>
+                    <button onClick={nextPage}>Next Page</button>
+                </div> */}
+                
             </div>
-            <div>
-                <Navbar />
-            </div> */}
-            {/* <div>
-                <Cards />
-            </div> */}
-            {/* <div className="flex items-center justify-center h-screen">
-                <div className="relative flex flex-col mt-6 text-gray-700 bg-white shadow-md bg-clip-border rounded-xl w-96">
-                    <div className="p-6">
-                        <h5 className="block mb-2 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
-                            UI/UX Review Check
-                        </h5>
-                        <p className="block font-sans text-base antialiased font-light leading-relaxed text-inherit">
-                            The place is close to Barceloneta Beach and bus stop just 2 min by walk
-                            and near to "Naviglio" where you can enjoy the main night life in
-                            Barcelona.
-                        </p>
-                    </div>
-                    <div className="p-6 pt-0">
-                        <button
-                            className="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
-                            type="button">
-                            Read More
-                        </button>
-                    </div>
-                </div>
-            </div> */}
-
-
-        </div>
+        </>
     )
 }
 

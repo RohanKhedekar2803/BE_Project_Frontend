@@ -1,72 +1,64 @@
-import React from 'react'
+import {
+    Card,
+    CardHeader,
+    CardBody,
+    Typography,
+    Button,
+} from "@material-tailwind/react";
 
-const Cards = () => {
+export default function HorizontalCard({ data }) {
     return (
-        <div>
+        <Card style={{ maxWidth: '60rem', marginLeft: '15rem' }}>
+            {/* <CardHeader
+          shadow={false}
+          floated={false}
+          className="m-0 w-2/5 shrink-0 rounded-r-none"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
+            alt="card-image"
+            className="h-full w-full object-cover"
+          />
+        </CardHeader> */}
 
-            <h1>Recommendations</h1>
+            
+                <div className="bg-blue-400 pl-3 pt-3 rounded-tl-md rounded-tr-md">
+                    <Typography variant="h5" color="gray" className="mb-4 uppercase font-bold font-sans-serif">
+                        {data?.name}
+                    </Typography>
+                </div>
+                <CardBody className="p-4 bg-white rounded-br-md rounded-bl-md">
 
-            <ul class="grid grid-cols-1 xl:grid-cols-3 gap-y-10 gap-x-6 items-start p-8">
-                <li class="relative flex flex-col sm:flex-row xl:flex-col items-start">
-                    <div class="order-1 sm:ml-6 xl:ml-0">
-                        <h3 class="mb-1 text-slate-900 font-semibold dark:text-slate-200">
-                            <span class="mb-1 block text-sm leading-6 text-indigo-500">Headless UI</span>Completely unstyled, fully
-                            accessible UI components</h3>
-                        <div class="prose prose-slate prose-sm text-slate-600 dark:prose-dark">
-                            <p>Completely unstyled, fully accessible UI components, designed to integrate beautifully with Tailwind
-                                CSS.</p>
-                        </div><a
-                            class="group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 focus:ring-slate-500 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:focus:ring-slate-500 mt-6"
-                            href="https://headlessui.dev">Learn
-                            more<span class="sr-only">, Completely unstyled, fully accessible UI components</span><svg
-                                class="overflow-visible ml-3 text-slate-300 group-hover:text-slate-400 dark:text-slate-500 dark:group-hover:text-slate-400"
-                                width="3" height="6" viewBox="0 0 3 6" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M0 0L3 3L0 6"></path>
-                            </svg></a>
+                    <Typography variant="h5" color="blue-gray" className="mb-2 font-bold font-sans-serif">
+                        {data?.description}
+                    </Typography>
+                    <Typography color="gray" className="mb-2 font-bold font-sans-serif">
+                        Language : {data?.language}
+                    </Typography>
+
+                    <div className="w-full flex space-x-4">
+                        <Typography color="gray" className="mb-2 font-bold font-sans-serif flex-grow">
+                            Stars : {data?.stars}
+                        </Typography>
+                        <Typography color="gray" className="mb-2 font-bold font-sans-serif flex-grow">
+                            Forks : {data?.forks}
+                        </Typography>
+                        <Typography color="gray" className="mb-2 font-bold font-sans-serif flex-grow">
+                            Size : {data?.size}
+                        </Typography>
                     </div>
-                </li>
-                <li class="relative flex flex-col sm:flex-row xl:flex-col items-start">
-                    <div class="order-1 sm:ml-6 xl:ml-0">
-                        <h3 class="mb-1 text-slate-900 font-semibold dark:text-slate-200">
-                            <span class="mb-1 block text-sm leading-6 text-purple-500">Heroicons</span>Beautiful hand-crafted SVG
-                            icons, by the makers of Tailwind CSS.</h3>
-                        <div class="prose prose-slate prose-sm text-slate-600 dark:prose-dark">
-                            <p>A set of 450+ free MIT-licensed SVG icons. Available as basic SVG icons and via first-party React and
-                                Vue libraries.</p>
-                        </div><a
-                            class="group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 focus:ring-slate-500 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:focus:ring-slate-500 mt-6"
-                            href="https://heroicons.com">Learn
-                            more<span class="sr-only">, Beautiful hand-crafted SVG icons, by the makers of Tailwind CSS.</span><svg
-                                class="overflow-visible ml-3 text-slate-300 group-hover:text-slate-400 dark:text-slate-500 dark:group-hover:text-slate-400"
-                                width="3" height="6" viewBox="0 0 3 6" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M0 0L3 3L0 6"></path>
-                            </svg></a>
-                    </div>
-                </li>
-                <li class="relative flex flex-col sm:flex-row xl:flex-col items-start">
-                    <div class="order-1 sm:ml-6 xl:ml-0">
-                        <h3 class="mb-1 text-slate-900 font-semibold dark:text-slate-200">
-                            <span class="mb-1 block text-sm leading-6 text-cyan-500">Hero Patterns</span>Seamless SVG background
-                            patterns by the makers of Tailwind CSS.</h3>
-                        <div class="prose prose-slate prose-sm text-slate-600 dark:prose-dfvdark">
-                            <p>A collection of over 100 free MIT-licensed high-quality SVG patterns for you to use in your web
-                                projects.</p>
-                        </div><a
-                            class="group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 focus:ring-slate-500 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:focus:ring-slate-500 mt-6"
-                            href="https://heropatterns.com">Learn
-                            more<span class="sr-only">, Seamless SVG background patterns by the makers of Tailwind CSS.</span><svg
-                                class="overflow-visible ml-3 text-slate-300 group-hover:text-slate-400 dark:text-slate-500 dark:group-hover:text-slate-400"
-                                width="3" height="6" viewBox="0 0 3 6" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M0 0L3 3L0 6"></path>
-                            </svg></a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    )
+
+
+                    <a href={data?.url} target="_blank" className="">
+                        <button className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            See More
+                        </button>
+                    </a>
+
+
+                </CardBody>
+            
+
+        </Card>
+    );
 }
-
-export default Cards
