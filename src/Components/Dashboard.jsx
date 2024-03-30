@@ -22,7 +22,7 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const { user } = useSelector((state) => state.auth)
     const [repos, setRepos] = useState([]);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(0);
 
     const nextPage = () => {
         setPage(page + 1);
@@ -37,7 +37,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchData = async (page) => {
             try {
-                const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=vk17-starlord&pageNo=${page}`, {
+                const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}`, {
                     hasLanguage: "",
                     hasTopic: "",
                 });
@@ -51,7 +51,7 @@ const Dashboard = () => {
         };
 
         fetchData(page);
-    }, [page]);
+    }, [page, user]);
 
 
     // const submitdata = (e) => {

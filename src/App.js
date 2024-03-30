@@ -6,6 +6,7 @@ import Register from './Components/Register';
 import Dashboard from './Components/Dashboard';
 import Challenge from './Components/Challenge';
 import CreateChallenge from './Components/CreateChallenge';
+import UpdateChallenge from './Components/UpdateChallenge';
 
 
 function App() {
@@ -21,7 +22,7 @@ function App() {
        <Route path='/challenge' element={<Challenge />} />
        <Route path='/createchallenge' element={<CreateChallenge />} />
        <Route path='/allchallenge' element={<Challenge />} />
-
+       <Route path='/updatechallenge' element={<UpdateChallenge />} />
     </Routes>
 </BrowserRouter>
     

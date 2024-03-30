@@ -1,5 +1,10 @@
 import React from 'react'
 import Navbar from './Navbar'
+import { useEffect, useState } from 'react'
+import Cards from './Cards';
+import axios from 'axios';
+import Pagination from './Pagination';
+import ChallengeCard from './ChallengeCard';
 
 const navigation = [
     {name : 'Create Challenge', href : 'http://localhost:3000/createchallenge', current : false},
@@ -12,9 +17,44 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 const Challenge = () => {
+
+    const [repos, setRepos] = useState([]);
+    const [page, setPage] = useState(0);
+
+    const nextPage = () => {
+        setPage(page + 1);
+    };
+
+    const prevPage = () => {
+        if (page > 1) {
+            setPage(page - 1);
+        }
+    };
+
+    const fetchData = async (page) => {
+        try {
+            const response = await axios.post(`http://localhost:9005/challenges/getbyprofile/?username=vk17-starlord&pageNo=${page}`, {
+                hasLanguage: "",
+                hasTopic: "",
+            });
+            console.log('Response:', response.data);
+            const res = response.data;
+            setRepos(res);
+            console.log("data: ", repos)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    useEffect(()=> {
+        fetchData(page)
+    }, [page])
+
+
     return (
 
-        <div>
+        <>
+        <div className="min-h-full bg-blue-100">
             <Navbar />
 
             <header className="bg-blue-300 shadow h-15">
@@ -44,7 +84,18 @@ const Challenge = () => {
                     </div>
                 </div>
             </header>
+
+            <div className="bg-blue-100 pt-6">
+                        {repos.map((item, index) => ( 
+                            <div key={index} className="mb-4">
+                                <ChallengeCard data={item} />
+                            </div>
+                        ))}
+                    </div>
+                    <Pagination nextPage={nextPage} prevPage={prevPage} /> 
+
         </div>
+        </>
     )
 }
 

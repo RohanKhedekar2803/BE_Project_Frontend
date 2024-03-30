@@ -16,6 +16,13 @@ export const register = createAsyncThunk('auth/register', async(user, thunkAPI) 
         // const response = await axios.get(`https://api.github.com/users/${user.name}`)
         // .then(response => response.data)
 
+        // http://localhost:9005/user/register
+
+        const response = await axios.post('http://localhost:9005/user/register', user);
+        console.log('Response:', response.data);
+        const res = response.data;
+        
+        
         if(user){
             localStorage.setItem('user', JSON.stringify(user))
         }
