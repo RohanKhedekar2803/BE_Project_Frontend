@@ -2,7 +2,11 @@ import React from 'react'
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-
+import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { logout , reset } from '../features/auth/authSlice'
+import { useSelector, useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
 
 const user = {
     name: 'Tom Cook',
@@ -12,10 +16,9 @@ const user = {
 }
 const navigation = [
     { name: 'Dashboard', href: 'http://localhost:3000/dashboard', current: false },
-    { name: 'Challenges', href: 'http://localhost:3000/challenge', current: false },
-    { name: 'Projects', href: '#', current: false },
-    { name: 'Calendar', href: '#', current: false },
-    { name: 'Reports', href: '#', current: false },
+    { name: 'Challenges', href: 'http://localhost:3000/userchallenges', current: false },
+    { name: 'Create Challenge', href: 'http://localhost:3000/createchallenge', current: false },
+    { name: 'All Challenges', href: 'http://localhost:3000/allchallenges', current: false },
 ]
 const userNavigation = [
     { name: 'Your Profile', href: '#' },
@@ -27,6 +30,18 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 const Navbar = () => {
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { user, isError, isSuccess, isLoading, message } = useSelector((state) => state.auth)
+
+    useEffect(() => {
+        if(!user){
+            toast.error(message);
+            navigate('/')
+        }
+    }, [])
+
     return (
         <div>
             <div className="min-h-full bg-blue-100">
@@ -81,7 +96,7 @@ const Navbar = () => {
                                                     <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                                         <span className="absolute -inset-1.5" />
                                                         <span className="sr-only">Open user menu</span>
-                                                        <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
+                                                        <img className="h-8 w-8 rounded-full"/>
                                                     </Menu.Button>
                                                 </div>
                                                 <Transition
@@ -94,7 +109,8 @@ const Navbar = () => {
                                                     leaveTo="transform opacity-0 scale-95"
                                                 >
                                                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                                        {userNavigation.map((item) => (
+                                                        {userNavigation
+                                                        .map((item) => (
                                                             <Menu.Item key={item.name}>
                                                                 {({ active }) => (
                                                                     <a
@@ -131,7 +147,9 @@ const Navbar = () => {
 
                             <Disclosure.Panel className="md:hidden">
                                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-                                    {navigation.map((item) => (
+                                    {navigation
+                                    .filter(item => item.name === 'Create Challenge')
+                                    .map((item) => (
                                         <Disclosure.Button
                                             key={item.name}
                                             as="a"
@@ -149,11 +167,11 @@ const Navbar = () => {
                                 <div className="border-t border-gray-700 pb-3 pt-4">
                                     <div className="flex items-center px-5">
                                         <div className="flex-shrink-0">
-                                            <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                                            <img className="h-10 w-10 rounded-full"/>
                                         </div>
                                         <div className="ml-3">
-                                            <div className="text-base font-medium leading-none text-white">{user.name}</div>
-                                            <div className="text-sm font-medium leading-none text-gray-400">{user.email}</div>
+                                            <div className="text-base font-medium leading-none text-white">{user?.name}</div>
+                                            <div className="text-sm font-medium leading-none text-gray-400">{user?.email}</div>
                                         </div>
                                         <button
                                             type="button"

@@ -13,13 +13,16 @@ module.exports = {
 ```
 */
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+
 
 export default function CreateChallenge() {
 
     const navigate = useNavigate();
+    const { user } = useSelector((state) => state.auth)
     const [formData, setFormData] = useState({
         createdBy : '',
         nameOfOrganization : '',
@@ -42,6 +45,12 @@ export default function CreateChallenge() {
         isHackathon : false,
         isSolo : false
     });
+
+    useEffect(() => {
+        if(!user){
+            navigate('/')
+        }
+    }, [user])
 
     const onChange = (e) => {
         setFormData((prevState) => ({

@@ -7,6 +7,7 @@ import Dashboard from './Components/Dashboard';
 import Challenge from './Components/Challenge';
 import CreateChallenge from './Components/CreateChallenge';
 import UpdateChallenge from './Components/UpdateChallenge';
+import AllChallenge from './Components/AllChallenges';
 
 
 function App() {
@@ -14,15 +15,16 @@ function App() {
 
 <BrowserRouter>
 
-    <Routes>      
+    <Routes>    
        <Route path="/" element={<Login />} />
        <Route path='/chat' element={<Chat />} />
        <Route path='/register' element={<Register />} />
        <Route path='/dashboard' element={<Dashboard />} />
-       <Route path='/challenge' element={<Challenge />} />
+       <Route path='/userchallenges' element={<Challenge />} />
        <Route path='/createchallenge' element={<CreateChallenge />} />
-       <Route path='/allchallenge' element={<Challenge />} />
        <Route path='/updatechallenge' element={<UpdateChallenge />} />
+       <Route path='/allchallenges' element={<AllChallenge />} />
+
     </Routes>
 </BrowserRouter>
     

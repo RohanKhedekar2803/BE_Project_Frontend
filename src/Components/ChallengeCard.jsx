@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+
+import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
 import {
     Card,
@@ -13,6 +15,7 @@ import {
 const ChallengeCard = ({ data }) => {
 
     const navigate = useNavigate();
+    const { user } = useSelector((state) => state.auth)
     // const initalData = data;
     const navigation = [
         { name: 'See More', href: data?.githubUrl },
@@ -21,7 +24,7 @@ const ChallengeCard = ({ data }) => {
     ]
 
     const updateCard = () => {
-        navigate('/updatechallenge', { state : { initialData : data} });
+        navigate('/updatechallenge', { state: { initialData: data } });
     }
 
 
@@ -29,13 +32,13 @@ const ChallengeCard = ({ data }) => {
         // http://localhost:9005/challenges/${formData.id}
         e.preventDefault();
         try {
-          await axios.delete(`http://localhost:9005/challenges/${data.id}`);
-          console.log('Deleted resource');
-          window.location.reload();
-          // Handle success, update UI or show notification
+            await axios.delete(`http://localhost:9005/challenges/${data.id}`);
+            console.log('Deleted resource');
+            window.location.reload();
+            // Handle success, update UI or show notification
         } catch (error) {
-          console.error('Error updating data:', error);
-          // Handle error, show error message
+            console.error('Error updating data:', error);
+            // Handle error, show error message
         }
     }
 
@@ -110,16 +113,26 @@ const ChallengeCard = ({ data }) => {
                             See More
                         </button>
                     </a>
-                    <a onClick={updateCard} target="_blank" className="">
-                        <button className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Update
-                        </button>
-                    </a>
-                    <a onClick={deleteCard} target="_blank" className="">
-                        <button className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Delete
-                        </button>
-                    </a>
+
+                    {
+                        user.isOrganization
+                            ?
+                            <div>
+                                <a onClick={updateCard} target="_blank" className="" >
+                                    <button className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                        Update
+                                    </button>
+                                </a>
+                                <a onClick={deleteCard} target="_blank" className="">
+                                    <button className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                        Delete
+                                    </button>
+                                </a>
+                            </div>
+                            :
+                            null
+
+                    }
                 </div>
 
             </CardBody>

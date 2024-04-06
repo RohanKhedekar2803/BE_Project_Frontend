@@ -1,11 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {useNavigate, useLocation} from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
 const UpdateChallenge = () => {
 
     const navigate = useNavigate();
+    const { user } = useSelector((state) => state.auth)
     const location = useLocation();
     const [formData, setFormData] = useState(location?.state?.initialData)
+
+    useEffect(() => {
+        if(!user){
+            navigate('/')
+        }
+    }, [user])
 
     const onChange = (e) => {
         setFormData((prevState) => ({

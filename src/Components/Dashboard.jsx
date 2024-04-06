@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { stompClient, isStompConnected } from '../Constants/StompClient';
-
+import { toast } from 'react-toastify'
 import Navbar from './Navbar';
 import Cards from './Cards';
 import Sidebar from './Sidebar';
@@ -12,17 +12,21 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import Pagination from './Pagination';
 import Spinner from './Spinner';
-
-
-
+import SearchBar from './SearchBar'
+import { logout , reset } from '../features/auth/authSlice'
 
 
 const Dashboard = () => {
 
     const navigate = useNavigate();
-    const { user } = useSelector((state) => state.auth)
+    const dispatch = useDispatch();
+    const { user, isError, isSuccess, isLoading, message } = useSelector((state) => state.auth)
     const [repos, setRepos] = useState([]);
     const [page, setPage] = useState(0);
+    const [languagesfilter, setLanguages] = useState([])
+    const [topicsfilter, setTopics] = useState([])
+    const [filterBy, setFilterBy] = useState("")
+
 
     const nextPage = () => {
         setPage(page + 1);
@@ -34,13 +38,81 @@ const Dashboard = () => {
         }
     };
 
+    const handleSelectlanguageChange = async (event) => {
+        const selectedOption = event.target.value;
+        const seleted = selectedOption.substring(1, selectedOption.length - 1);
+        console.log(seleted)
+
+
+        try {
+            const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}`, {
+                hasLanguage: seleted,
+                hasTopic: "",
+            });
+            // Process the API response as needed
+            const dataArray = response.data.content;
+            setRepos(dataArray);
+            console.log("data", dataArray)
+        } catch (error) {
+            console.error('Error calling API:', error);
+        }
+    };
+
+    const handleSelecttopicChange = async (event) => {
+        const selectedOption = event.target.value;
+        const seleted = selectedOption.substring(1, selectedOption.length - 1);
+        console.log(seleted)
+
+
+        try {
+            const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}`, {
+                hasLanguage: "",
+                hasTopic: seleted,
+            });
+            // Process the API response as needed
+            const dataArray = response.data.content;
+            setRepos(dataArray);
+            console.log("data", dataArray)
+        } catch (error) {
+            console.error('Error calling API:', error);
+        }
+    };
+
+    const handleFilterChange = (event) => {
+        const val = event.target.value;
+
+        setFilterBy(val);
+
+    }
+
+    //   useEffect(() => {
+
+    //   }, [repos])
+
     useEffect(() => {
+
+        if(!user){
+            toast.error(message)
+            navigate('/')
+        }
+        
         const fetchData = async (page) => {
             try {
+
+                const languages = await axios.get(`http://localhost:9005/utils/getlang`)
+                setLanguages(languages.data)
+                console.log(languages.data)
+
+                const topics = await axios.get(`http://localhost:9005/utils/gettopics`);
+                setTopics(topics.data)
+                console.log(topics.data)
+
+
                 const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}`, {
                     hasLanguage: "",
                     hasTopic: "",
                 });
+
                 console.log('Response:', response.data);
                 const dataArray = response.data.content;
                 setRepos(dataArray);
@@ -70,6 +142,12 @@ const Dashboard = () => {
     //     navigate('/chat');
     // };
 
+    const onLogout = () => {
+        dispatch(logout())
+        dispatch(reset())
+        navigate('/')
+    }
+
     return (
         <>
             {/*
@@ -86,25 +164,92 @@ const Dashboard = () => {
 
                 {
                     repos ? (
-                    <div>
-                        <Navbar/>
-                        
-                <header className="bg-blue-100 shadow">
-                    <div className="max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Recommended Projects</h1>
-                    </div>
-                </header>
-                    <div className="bg-blue-100">
-                        {repos.map((item, index) => ( 
-                            <div key={index} className="mb-4">
-                                <Cards data={item} />
+                        <div>
+                            <Navbar />
+
+                            <header className="bg-blue-100 shadow">
+                                <div className="max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">Recommended Projects</h1>
+                                </div>
+                            </header>
+                            <button onClick={onLogout} >Logout</button>
+                            <label className='text-black'>Filter By</label>
+                            <select className='text-black' onChange={handleFilterChange}>
+                                <option value="">Select an option</option>
+                                <option value="Languages" className='text-black'>Languages</option>
+                                <option value="Topics" className='text-black'>Topics</option>
+                            </select>
+
+                            {
+                                filterBy === "Languages"
+
+                                    ?
+
+                                    <div>
+                                        <label className='text-black'>Filter by language</label>
+                                        <select id="mySelect" onChange={handleSelectlanguageChange} className='text-black'>
+                                            <option value="">Select an option</option>
+                                            {languagesfilter.map((option, index) => (
+                                                <option key={index} value={option.languageName}>
+                                                    {option.languageName}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    : null
+                            }
+
+                            {
+                                filterBy === "Topics" ?
+                                    <div>
+                                        <label className='text-black'>Filter by topic</label>
+                                        <select id="mySelect" onChange={handleSelecttopicChange} className='text-black'>
+                                            <option value="">Select an option</option>
+                                            {topicsfilter.map((option, index) => (
+                                                <option key={index} value={option.topicName}>
+                                                    {option.topicName}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    :
+
+                                    null
+                            }
+
+
+                            {/* <label className='text-black'>Filter by language</label>
+                            <select id="mySelect" onChange={handleSelectlanguageChange} className='text-black'>
+                                <option value="">Select an option</option>
+                                {languagesfilter.map((option, index) => (
+                                    <option key={index} value={option.languageName}>
+                                        {option.languageName}
+                                    </option>
+                                ))}
+                            </select>
+
+                            <label className='text-black'>Filter by topic</label>
+                            <select id="mySelect" onChange={handleSelecttopicChange} className='text-black'>
+                                <option value="">Select an option</option>
+                                {topicsfilter.map((option, index) => (
+                                    <option key={index} value={option.topicName}>
+                                        {option.topicName}
+                                    </option>
+                                ))}
+                            </select> */}
+
+                            <div className="bg-blue-100">
+                                {repos.map((item, index) => (
+                                    <div key={index} className="mb-4">
+                                        <Cards data={item} />
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                    <Pagination nextPage={nextPage} prevPage={prevPage} /> 
- 
-                    </div>
-                     ) : <Spinner/>
+                            <Pagination nextPage={nextPage} prevPage={prevPage} />
+
+                        </div>
+                    ) : <Spinner />
                 }
                 {/* <div className="bg-blue-100">
                     {repos.map((item, index) => (
@@ -118,7 +263,7 @@ const Dashboard = () => {
                     <button onClick={prevPage}>Previous Page</button>
                     <button onClick={nextPage}>Next Page</button>
                 </div> */}
-                
+
             </div>
         </>
     )

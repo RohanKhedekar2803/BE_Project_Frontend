@@ -1,1 +1,1 @@
-// const WS_CONNECTION_KEY = 'ws_connection';
+const WS_CONNECTION_KEY = 'ws_connection';
