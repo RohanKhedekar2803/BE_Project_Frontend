@@ -17,7 +17,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
 
   const username = 'inciner8r'; // Replace 'YOUR_GITHUB_USERNAME' with your actual GitHub username
-  const accessToken = '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'; // Replace 'YOUR_GITHUB_ACCESS_TOKEN' with your actual GitHub access token
+  const accessToken = process.env.GITHUB_ACCESS_TOKEN; // Replace 'YOUR_GITHUB_ACCESS_TOKEN' with your actual GitHub access token
   
   useEffect(() => {
     const fetchUserData = async () => {
