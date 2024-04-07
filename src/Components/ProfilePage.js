@@ -1,6 +1,3 @@
-// const username = 'inciner8r'; // Replace 'YOUR_GITHUB_USERNAME' with your actual GitHub username
-// const accessToken = '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'; // Replace 'YOUR_GITHUB_ACCESS_TOKEN' with your actual GitHub access token
-
 import React, { useState, useEffect } from 'react';
 import { Card, Avatar, Typography, List, Row, Col } from 'antd';
 import axios from 'axios';
@@ -16,8 +13,8 @@ const ProfilePage = () => {
   const [reposData, setReposData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const username = 'inciner8r'; // Replace 'YOUR_GITHUB_USERNAME' with your actual GitHub username
-  const accessToken = process.env.GITHUB_ACCESS_TOKEN; // Replace 'YOUR_GITHUB_ACCESS_TOKEN' with your actual GitHub access token
+  const username = 'inciner8r'; 
+  const accessToken = process.env.GITHUB_ACCESS_TOKEN; 
   
   useEffect(() => {
     const fetchUserData = async () => {
