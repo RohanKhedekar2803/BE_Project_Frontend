@@ -8,9 +8,9 @@ const items = [
 
 export default function Pagination(props) {
   return (
-    <div className="flex bg-blue-100 px-4 py-3 sm:px-6" style={{ maxWidth: '50rem', marginLeft: '20rem' }}>
+    <div className="flex px-4 py-3 sm:px-6" style={{ maxWidth: '1000px', marginLeft: '20px', marginBottom:"30px", paddingBottom: "30px" }}>
       <div className="flex flex-1 justify-end">
-            <a
+            <a style={{ background:"#2a1433"}} 
               href="#"
               onClick={props.prevPage}
               className="relative inline-flex items-center rounded-l-md px-2 py-2 bg-white text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
@@ -19,7 +19,7 @@ export default function Pagination(props) {
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </a>
 
-            <a
+            <a style={{ background:"#2a1433"}} 
               href="#"
               onClick={props.nextPage}
               className="relative inline-flex items-center rounded-r-md px-2 py-2 bg-white text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"

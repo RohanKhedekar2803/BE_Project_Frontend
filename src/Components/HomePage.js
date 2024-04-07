@@ -4,12 +4,15 @@ import { Layout } from 'antd';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import Chat from './Chat'; 
+import Dashboard from './Dashboard';
+import Challenge from './Challenge';
+import ProfilePage from './ProfilePage';
 
 const { Content } = Layout;
 
 const HomePage = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [darkTheme, setDarkTheme] = useState(false);
+  const [darkTheme, setDarkTheme] = useState(true);
   const [selectedMenuItem, setSelectedMenuItem] = useState('1');
 
   const toggleSidebar = () => {
@@ -33,15 +36,19 @@ const HomePage = () => {
         darkTheme={darkTheme}
       />
       <Layout className={darkTheme ? 'dark-theme' : 'light-theme'}>
-        <Navbar toggleSidebar={toggleSidebar} toggleTheme={toggleTheme} darkTheme={darkTheme} />
-        <Content style={{ backgroundColor: darkTheme ? "#001c36" : "#eeeeee"}}>
+        <Navbar  toggleSidebar={toggleSidebar} toggleTheme={toggleTheme} darkTheme={darkTheme} />
+        <Content style={{ backgroundColor: darkTheme ? "#43244f" : "#ffe0ff", borderRadius: "25px", overflowY: "auto" }}>
           {selectedMenuItem === '1' ? (
-            <div>
-              <h1 className="text-2xl font-semibold mb-4">Welcome to Your App</h1>
-              {/* Add more content as needed */}
+            <div style={{ position: 'fixed', left: '200px', width: 'calc(100% - 200px)', height: '100vh', overflowY: 'auto', backgroundColor: darkTheme ? "#43244f" : "#ffe0ff", borderRadius: "25px" }} >
+              < Dashboard />
+
             </div>
           ) : selectedMenuItem === '2' ? (
-            <Chat />
+            <div style={{ position: 'fixed', width: '100%', height: '100vh', overflowY: 'auto', backgroundColor: darkTheme ? "#43244f" : "#ffe0ff", borderRadius: "25px" }} >
+            <Challenge /></div>
+          ) :  selectedMenuItem === '4' ? (
+            <div style={{ position: 'fixed', width: '100%', height: '100vh', overflowY: 'auto', backgroundColor: darkTheme ? "#43244f" : "#ffe0ff", borderRadius: "25px" }} >
+            <ProfilePage /></div>
           ) : null}
         </Content>
       </Layout>

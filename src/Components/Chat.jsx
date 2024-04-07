@@ -3,11 +3,12 @@ import { stompClient, isStompConnected } from '../Constants/StompClient';
 import ChatWindow from './ChatWindow';
 import { UsernameContext } from '../Context/UsernameContext';
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
 
 const Chat = () => {
   const usercontext= useContext(UsernameContext)
   const { user, isError, isSuccess, isLoading, message } = useSelector((state) => state.auth)
-
+  const navigate = useNavigate();
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [friendsList, setFriendsList] = useState([]);
   const [newMessages, setNewMessages] = useState([
@@ -47,6 +48,10 @@ const Chat = () => {
 
 
   useEffect(() => {
+
+    if(!user){
+      navigate('/')
+    }
     const getFriendsList = async () => {
       try {
         const response = await fetch('http://localhost:8080/getActiveUsers');

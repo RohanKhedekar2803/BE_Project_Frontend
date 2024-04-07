@@ -48,9 +48,9 @@
 /* antd css below */
 /* App.css */
 :root {
-  --main-bg-color-light: #fff;
+  --main-bg-color-light: #ffe0ff;
   --main-text-color-light: #001529;
-  --main-bg-color-dark: #001529;
+  --main-bg-color-dark: #2a1433;
   --main-text-color-dark: #fff;
 }
 
@@ -80,12 +80,18 @@
   background-color: var(--sider-bg-color-dark);
   color: var(--sider-text-color-dark);
 }
+.ant-menu-dark {
+  background: none;
+}
 
 .light-theme .ant-layout .ant-layout-sider {
   background-color: var(--sider-bg-color-light);
   color: var(--sider-text-color-light);
 }
 
+.ant-menu-dark .ant-menu-item-selected, .ant-menu-dark .ant-menu-item-selected {
+  background-color: #b99eb1;
+}
 .logo {
   height: 32px;
   background: rgba(255, 255, 255, 0.2);
