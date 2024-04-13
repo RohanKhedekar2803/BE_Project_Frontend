@@ -209,7 +209,9 @@ import axios from 'axios';
 import Pagination from './Pagination';
 import ChallengeCard from './ChallengeCard';
 import CreateChallenge from './CreateChallenge';
+import { useNavigate } from 'react-router-dom'
 
+import { useSelector, useDispatch } from 'react-redux'
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
@@ -221,7 +223,9 @@ const Challenge = () => {
     const [languagesfilter, setLanguages] = useState([]);
     const [topicsfilter, setTopics] = useState([]);
     const [filterBy, setFilterBy] = useState('');
-
+    
+    const navigate = useNavigate();
+    const { user } = useSelector((state) => state.auth)
 
     const nextPage = () => {
         setPage(page + 1);
@@ -235,7 +239,7 @@ const Challenge = () => {
 
     const fetchData = async (page) => {
         try {
-            const response = await axios.post(`http://localhost:9005/challenges/getbyprofile/?username=vk17-starlord&pageNo=${page}`, {
+            const response = await axios.post(`http://localhost:9005/challenges/getAllChallengesByProfile/?username=${user.username}&pageNo=${page}`, {
                 hasLanguage: '',
                 hasTopic: '',
             });
@@ -260,24 +264,59 @@ const Challenge = () => {
         try {
             const languages = await axios.get(`http://localhost:9005/utils/getlang`);
             setLanguages(languages.data);
+            console.log(languages.data)
             const topics = await axios.get(`http://localhost:9005/utils/gettopics`);
-            setTopics(topics.data);
+            setTopics(topics.data)
+            // setTopics(topics.data);
+//             const inputString = topics.data[0].topicname;
+//             console.log(inputString)
+// const tokens = inputString.slice(1, -1).split(", ").map(token => token.slice(1, -1));
+// console.log(tokens);
+//             setTopics(tokens)
+            console.log(topics.data)
         } catch (error) {
             console.error('Error fetching languages or topics:', error);
         }
     };
+
     const handleSelectlanguageChange = async (event) => {
         const selectedOption = event.target.value;
-        const selectedLanguage = selectedOption.substring(1, selectedOption.length - 1);
-        setFilterBy(''); // Clear any previous filter
-        await fetchData(1, selectedLanguage); // Reset page to 1 when filtering
+        const seleted = selectedOption.substring(1, selectedOption.length - 1);
+        console.log(seleted)
+
+
+        try {
+            const response = await axios.post(`http://localhost:9005/challenges/getAllChallengesByProfile/?username=${user.username}&pageNo=${page}`, {
+                hasLanguage: seleted,
+                hasTopic: "",
+            });
+            // Process the API response as needed
+            const dataArray = response.data
+            setRepos(dataArray);
+            console.log("data", dataArray)
+        } catch (error) {
+            console.error('Error calling API:', error);
+        }
     };
 
     const handleSelecttopicChange = async (event) => {
         const selectedOption = event.target.value;
-        const selectedTopic = selectedOption.substring(1, selectedOption.length - 1);
-        setFilterBy(''); // Clear any previous filter
-        await fetchData(1, '', selectedTopic); // Reset page to 1 when filtering
+        const seleted = selectedOption.substring(1, selectedOption.length - 1);
+        console.log(seleted)
+
+
+        try {
+            const response = await axios.post(`http://localhost:9005/challenges/getAllChallengesByProfile/?username=${user.username}&pageNo=${page}`, {
+                hasLanguage: "",
+                hasTopic: seleted,
+            });
+            // Process the API response as needed
+            const dataArray = response.data;
+            setRepos(dataArray);
+            console.log("data", dataArray)
+        } catch (error) {
+            console.error('Error calling API:', error);
+        }
     };
 
     const handleFilterChange = (event) => {
@@ -357,17 +396,29 @@ const Challenge = () => {
 
                             {
                                 filterBy === "Topics" ?
-                                    <div>
-                                        <label className='text-black'>Filter by topic</label>
-                                        <select id="mySelect" onChange={handleSelecttopicChange} className='text-black'>
-                                            <option value="">Select an option</option>
-                                            {topicsfilter.map((option, index) => (
-                                                <option key={index} value={option.topicName}>
-                                                    {option.topicName}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                    // <div>
+                                    //     <label >Filter by topic</label>
+                                    //     <select id="mySelect" onChange={handleSelecttopicChange} className='text-black'>
+                                    //         <option value="">Select an option</option>
+                                    //         {topicsfilter.map((option, index) => (
+                                    //             <option style key={index} value={option.topicName}>
+                                    //                 {option.topicName}
+                                    //             </option>
+                                    //         ))}
+                                    //     </select>
+                                    // </div>
+
+                                    <div style={{ paddingLeft:"20px"}}>
+                                    <label style={{ color:"pink" }}>Filter by Topic   :</label>
+                                    <select style={{ color:"pink", background:"#2a1433" }} id="mySelect" onChange={handleSelecttopicChange} >
+                                        <option style={{ color:"pink", background:"#2a1433" }} value="">Select an option</option>
+                                        {topicsfilter.map((option, index) => (
+                                            <option style={{ color:"pink", background:"#2a1433" }} key={index} value={option.topicname}>
+                                                {option.topicname}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
                                     :
 
                                     null

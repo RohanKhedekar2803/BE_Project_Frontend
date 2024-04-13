@@ -1,17 +1,19 @@
 import React, { useContext,useState } from 'react';
 import { UsernameContext } from '../Context/UsernameContext';
 import { stompClient} from '../Constants/StompClient';
+import { useSelector, useDispatch } from 'react-redux'
 
 const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
 
-  const usercontext= useContext(UsernameContext)
+  // const usercontext= useContext(UsernameContext)
   const [draftMessage,setDraftMessage]=useState('draft');
-  
+  const { user } = useSelector((state) => state.auth)
+
   const sendMessage= () =>{
 
-    var user=usercontext.username
+    // var user=usercontext.username
     const userObject = {
-      senderId: user,
+      senderId: user?.username,
       receiverId: selectedFriend,
       content: draftMessage,
 
@@ -41,13 +43,13 @@ const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
             (
               <div
                 key={message.id}
-                className={message.senderId === usercontext.username ? 'flex items-end justify-end' : 'flex items-start'}
+                className={message.senderId === user.username ? 'flex items-end justify-end' : 'flex items-start'}
               >
                 <div
-                  className={message.senderId === usercontext.username ? 'bg-gray-200 rounded-lg p-2' : 'bg-gray-200 rounded-lg p-2'}
+                  className={message.senderId === user.username ? 'bg-gray-200 rounded-lg p-2' : 'bg-gray-200 rounded-lg p-2'}
                 >
                   <p className="text-sm">{message.content}</p>
-                  <p className="text-xs text-gray-500 text-right">{`${message.senderId === usercontext.username ? 'You' : message.senderId}, ${message.timeStamp}`}</p>
+                  <p className="text-xs text-gray-500 text-right">{`${message.senderId === user.username ? 'You' : message.senderId}, ${message.timeStamp}`}</p>
                 </div>
               </div>
             )

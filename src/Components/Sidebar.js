@@ -2,7 +2,9 @@ import React from 'react';
 import { Layout, Menu, Button } from 'antd';
 import { logout , reset } from '../features/auth/authSlice'
 import { useNavigate } from 'react-router-dom'
-import {  useDispatch } from 'react-redux'
+// import {  useDispatch } from 'react-redux'
+import { stompClient, isStompConnected } from '../Constants/StompClient';
+import { useSelector, useDispatch } from 'react-redux'
 import {
   MessageOutlined,
   LogoutOutlined,
@@ -20,12 +22,30 @@ const Sidebar = ({ collapsed, handleMenuClick, toggleSidebar, darkTheme }) => {
   const siderClass = darkTheme ? 'dark-theme' : 'light-theme';
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth)
 
   const onLogout = () => {
     dispatch(logout())
     dispatch(reset())
     navigate('/')
 }
+
+
+    const submitdata = (e) => {
+        e.preventDefault();
+        // var user=usercontext.username
+        var username = user.nickname
+        const userObject = {
+            senderId: username,
+            content: `user ${username} have joined the chat`
+        };
+
+        stompClient.send(
+            '/app/user.addUser',
+            JSON.stringify(userObject),
+            {});
+        navigate('/chat');
+    };
 
   return (
     <Sider
@@ -58,7 +78,7 @@ const Sidebar = ({ collapsed, handleMenuClick, toggleSidebar, darkTheme }) => {
         <Menu.Item key="2" icon={<CodeOutlined />}>
           Challenges
         </Menu.Item>
-        <Menu.Item key="3" icon={<MessageOutlined />}>
+        <Menu.Item key="3" icon={<MessageOutlined onClick={onsubmit}/>}>
         Chats
         </Menu.Item>
         <Menu.Item key="4" icon={<UserOutlined />}>

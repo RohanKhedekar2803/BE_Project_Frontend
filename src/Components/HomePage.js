@@ -49,6 +49,9 @@ const HomePage = () => {
           ) :  selectedMenuItem === '4' ? (
             <div style={{ position: 'fixed', width: '100%', height: '100vh', overflowY: 'auto', backgroundColor: darkTheme ? "#43244f" : "#ffe0ff", borderRadius: "25px" }} >
             <ProfilePage /></div>
+          ) : selectedMenuItem === '3' ? (
+            <div style={{ position: 'fixed', width: '100%', height: '100vh', overflowY: 'auto', backgroundColor: darkTheme ? "#43244f" : "#ffe0ff", borderRadius: "25px" }} >
+            <Chat /></div>
           ) : null}
         </Content>
       </Layout>

@@ -154,7 +154,10 @@ const Dashboard = () => {
     const [languagesfilter, setLanguages] = useState([])
     const [topicsfilter, setTopics] = useState([])
     const [filterBy, setFilterBy] = useState("")
-
+    const [sortBy, setSortBy] = useState("recommended")
+    const [topic, setTopic] = useState("")
+    const [lang, setLang] = useState("")
+    const [isLang, setIsLang] = useState(false)
 
     const nextPage = () => {
         setPage(page + 1);
@@ -169,11 +172,13 @@ const Dashboard = () => {
     const handleSelectlanguageChange = async (event) => {
         const selectedOption = event.target.value;
         const seleted = selectedOption.substring(1, selectedOption.length - 1);
+        setLang(seleted)
+        setIsLang(true)
         console.log(seleted)
 
 
         try {
-            const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}`, {
+            const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}&sortBy=${sortBy}`, {
                 hasLanguage: seleted,
                 hasTopic: "",
             });
@@ -189,11 +194,12 @@ const Dashboard = () => {
     const handleSelecttopicChange = async (event) => {
         const selectedOption = event.target.value;
         const seleted = selectedOption.substring(1, selectedOption.length - 1);
+        setTopic(seleted)
+        setIsLang(false)
         console.log(seleted)
 
-
         try {
-            const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}`, {
+            const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}&sortBy=${sortBy}`, {
                 hasLanguage: "",
                 hasTopic: seleted,
             });
@@ -206,8 +212,61 @@ const Dashboard = () => {
         }
     };
 
+    const handleSortChange = async (event) => {
+        setSortBy(event.target.value)
+        console.log(sortBy)
+        
+        
+        try {
+            
+            if(isLang){
+                console.log(lang)
+                const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}&sortBy=${event.target.value}`, {
+                    hasLanguage: lang,
+                    hasTopic: "",
+                });
+                // Process the API response as needed
+                const dataArray = response.data.content;
+                setRepos(dataArray);
+                console.log("data", dataArray)
+
+            }else if(!isLang){
+                const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}&sortBy=${event.target.value}`, {
+                    hasLanguage: "",
+                    hasTopic: topic,
+                });
+                // Process the API response as needed
+                const dataArray = response.data.content;
+                setRepos(dataArray);
+                console.log("data", dataArray)
+
+            }else{
+                console.log("lang", lang)
+                console.log("topic", topic)
+                const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}&sortBy=${event.target.value}`, {
+                    hasLanguage: "",
+                    hasTopic: "",
+                });
+                // Process the API response as needed
+                const dataArray = response.data.content;
+                setRepos(dataArray);
+                console.log("data", dataArray)
+
+            }
+
+        } catch (error) {
+            console.error('Error calling API:', error);
+        }
+
+    }
+
     const handleFilterChange = (event) => {
         const val = event.target.value;
+        if(val == "Languages"){
+            setIsLang(true)
+        }else{
+            setIsLang(false)
+        }
 
         setFilterBy(val);
 
@@ -225,6 +284,7 @@ const Dashboard = () => {
         }
         
         const fetchData = async (page) => {
+            
             try {
 
                 const languages = await axios.get(`http://localhost:9005/utils/getlang`)
@@ -233,10 +293,9 @@ const Dashboard = () => {
 
                 const topics = await axios.get(`http://localhost:9005/utils/gettopics`);
                 setTopics(topics.data)
-                console.log(topics.data)
 
 
-                const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}`, {
+                const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}&sortBy=${sortBy}`, {
                     hasLanguage: "",
                     hasTopic: "",
                 });
@@ -252,6 +311,10 @@ const Dashboard = () => {
 
         fetchData(page);
     }, [page, user]);
+
+    useEffect(() => {
+
+    }, [lang])
 
 
     // const submitdata = (e) => {
@@ -355,14 +418,25 @@ const Dashboard = () => {
                                             <select id="mySelect" onChange={handleSelecttopicChange} className='text-black'>
                                                 <option value="">Select an option</option>
                                                 {topicsfilter.map((option, index) => (
-                                                    <option key={index} value={option.topicName}>
-                                                        {option.topicName}
+                                                    <option key={index} value={option.topicname}>
+                                                        {option.topicname}
                                                     </option>
                                                 ))}
                                             </select>
                                         </div>
                                     )}
                                 </div>
+
+                                <div>
+                                            <label className='text-black'>Sort by</label>
+                                            <select id="mySelect" onChange={handleSortChange} className='text-black'>
+                                                <option value="">Select an option</option>
+                                                <option value="stars">by popularity</option>
+                                                <option value="size">by size</option>
+                                                <option value="forks">most contributed</option>
+                                                <option value="createdAt">newestFirst</option>
+                                            </select>
+                                        </div>
                             </header>
 
                             

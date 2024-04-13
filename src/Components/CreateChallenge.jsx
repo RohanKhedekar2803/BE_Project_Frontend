@@ -2,7 +2,7 @@
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import { useState } from 'react'
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Button } from 'antd';
 
 
@@ -10,26 +10,23 @@ export default function CreateChallenge() {
 
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        createdBy : '',
-        nameOfOrganization : '',
-        nameChallenge : '',
-        problemStatement : '',
-        description : '',
-        githubUrl : '',
-        language : '',
-        topics : '',
-        startDateAndTime : '',
-        endDateAndTime : '',
-        createdAt : '',
-        minPeopleinTeam : 0,
-        maxPeopleinTeam : 0,
-        salaryPerYear : 0,
-        theme : '',
-        prize : 0,
-        isBounty : false,
-        isHiring : false,
-        isHackathon : false,
-        isSolo : false
+        createdBy: '',
+        nameOfOrganization: '',
+        nameChallenge: '',
+        problemStatement: '',
+        description: '',
+        githubUrl: '',
+        language: '',
+        topics: '',
+        startDateAndTime: '',
+        endDateAndTime: '',
+        createdAt: '',
+        minPeopleinTeam: 0,
+        maxPeopleinTeam: 0,
+        salaryPerYear: 0,
+        theme: '',
+        prize: 0,
+        challengeType : ""
     });
 
     const onChange = (e) => {
@@ -67,8 +64,8 @@ export default function CreateChallenge() {
     return (
         <form onSubmit={handleSubmit}
         >
-            <div style={{ padding: "50px", background: "#ebc9e1", borderRadius: "25px"}} >
-               
+            <div style={{ padding: "50px", background: "#ebc9e1", borderRadius: "25px" }} >
+
 
                 <div className="border-b border-gray-900/10 pb-12 text-base">
                     <h2 className="text-3xl font-semibold leading-7 text-gray-900">Create a challenge</h2>
@@ -123,7 +120,7 @@ export default function CreateChallenge() {
 
                                     rows={2}
                                     className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    
+
                                 />
                             </div>
                             <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
@@ -142,7 +139,7 @@ export default function CreateChallenge() {
 
                                     rows={3}
                                     className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    
+
                                 />
                             </div>
                             <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
@@ -166,7 +163,7 @@ export default function CreateChallenge() {
                             </div>
                         </div>
 
-                        
+
 
                         <div className="sm:col-span-2 sm:col-start-1">
                             <label htmlFor="language" className="block text-md font-medium leading-6 text-gray-900">
@@ -330,23 +327,15 @@ export default function CreateChallenge() {
                                     name="topics"
                                     value={formData.topics}
                                     onChange={onChange}
-
                                     id="topics"
                                     autoComplete="address-level2"
                                     className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
-
                     </div>
-
                 </div>
-
-
-
-
-
-                <div className="border-b border-gray-900/10 pb-12">
+                {/* <div className="border-b border-gray-900/10 pb-12">
                     <h2 className="text-base font-semibold leading-7 text-gray-900 mt-2">Other Details</h2>
                  
 
@@ -388,7 +377,7 @@ export default function CreateChallenge() {
                                         <label htmlFor="isHiring" className="font-medium text-gray-900 text-md">
                                             Hiring
                                         </label>
-                                        {/* <p className="text-gray-500">Get notified when a candidate applies for a job.</p> */}
+                                        
                                     </div>
                                 </div>
                                 <div className="relative flex gap-x-3">
@@ -407,7 +396,6 @@ export default function CreateChallenge() {
                                         <label htmlFor="isHackathon" className="font-medium text-gray-900 text-md">
                                             Hackathon
                                         </label>
-                                        {/* <p className="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p> */}
                                     </div>
                                 </div>
                                 <div className="relative flex gap-x-3">
@@ -426,14 +414,25 @@ export default function CreateChallenge() {
                                         <label htmlFor="isSolo" className="font-medium text-gray-900 text-md">
                                             Solo Challenge
                                         </label>
-                                        {/* <p className="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p> */}
                                     </div>
                                 </div>
                             </div>
                         </fieldset>
                      
                     </div>
+                </div> */}
+
+                <div>
+                    <label style={{ color: "pink" }}>Select type of Challenge</label>
+                    <select style={{ color: "pink", background: "#2a1433" }} id="mySelect" onChange={onChange} name='challengeType' value={formData.challengeType}>
+                        <option style={{ color: "pink", background: "#2a1433" }} value="">Select an option</option>
+                        <option style={{ color: "pink", background: "#2a1433" }} value="isHackathon">Hackathon</option>
+                        <option style={{ color: "pink", background: "#2a1433" }} value="isBounty">Bounty</option>
+                        <option style={{ color: "pink", background: "#2a1433" }} value="isHiring">Hiring</option>
+                        <option style={{ color: "pink", background: "#2a1433" }} value="isSolo">Solo</option>
+                    </select>
                 </div>
+
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "40px" }}>
                     <button type="button" style={{ backgroundColor: "#ccc", padding: "10px 20px", borderRadius: "5px", border: "none", cursor: "pointer", marginRight: "10px" }}>
                         Cancel
@@ -441,11 +440,11 @@ export default function CreateChallenge() {
                     <button type="submit" style={{ backgroundColor: "purple", padding: "10px 20px", borderRadius: "5px", color: "white", border: "none", cursor: "pointer" }}>
                         Save
                     </button>
-                    </div>
+                </div>
 
             </div>
 
-            
+
         </form>
     )
 }
