@@ -10,6 +10,8 @@ import UpdateChallenge from './Components/UpdateChallenge';
 import LoginPage from './Components/LoginPage';
 import GitHubUserPage from './Components/ProfilePage';
 import HomePage from './Components/HomePage';
+import ManageChallenges from './Components/ManageChallenges';
+import Friends from './Components/Friends';
 
 
 function App() {
@@ -27,6 +29,8 @@ function App() {
        <Route path='/createchallenge' element={<CreateChallenge />} />
        <Route path='/allchallenge' element={<Challenge />} />
        <Route path='/updatechallenge' element={<UpdateChallenge />} />
+       <Route path='/managechallenges' element={<ManageChallenges />} />
+       <Route path='/friends' element={<Friends />} />
     </Routes>
 </BrowserRouter>
     

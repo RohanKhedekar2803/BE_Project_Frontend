@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Avatar, Typography, List, Row, Col } from 'antd';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
 
+import { useSelector, useDispatch } from 'react-redux'
 const { Meta } = Card;
 const { Title, Text } = Typography;
 
@@ -12,6 +14,8 @@ const ProfilePage = () => {
   const [orgsData, setOrgsData] = useState([]);
   const [reposData, setReposData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth)
 
   const username = 'inciner8r'; 
   const accessToken = process.env.GITHUB_ACCESS_TOKEN; 
@@ -19,25 +23,25 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const config = {
-          headers: {
-            Authorization: `token ${accessToken}`
-          }
-        };
-
-        const userResponse = await axios.get(`https://api.github.com/users/${username}`, config);
+        // const config = {
+        //   headers: {
+        //     Authorization: `token ${accessToken}`
+        //   }
+        // };
+        console.log(user.username)
+        const userResponse = await axios.get(`https://api.github.com/users/${user.username}`);
         setUserData(userResponse.data);
         
-        const followersResponse = await axios.get(`https://api.github.com/users/${username}/followers`, config);
+        const followersResponse = await axios.get(`https://api.github.com/users/${user.username}/followers`);
         setFollowers(followersResponse.data);
 
-        const followingResponse = await axios.get(`https://api.github.com/users/${username}/following`, config);
+        const followingResponse = await axios.get(`https://api.github.com/users/${user.username}/following`);
         setFollowing(followingResponse.data);
 
-        const orgsResponse = await axios.get(`https://api.github.com/users/${username}/orgs`, config);
+        const orgsResponse = await axios.get(`https://api.github.com/users/${user.username}/orgs`);
         setOrgsData(orgsResponse.data);
 
-        const reposResponse = await axios.get(`https://api.github.com/users/${username}/repos?sort=stars`, config);
+        const reposResponse = await axios.get(`https://api.github.com/users/${user.username}/repos?sort=stars`);
         setReposData(reposResponse.data);
 
         setLoading(false);
@@ -46,8 +50,9 @@ const ProfilePage = () => {
       }
     };
 
+
     fetchUserData();
-  }, [accessToken, username]);
+  }, [user]);
 
   return (
     <div style={{ position: 'fixed', left: '200px', width: 'calc(100% - 200px)', height: '100vh', overflowY: 'auto', paddingBottom:"50px", borderRadius: "25px" }} >

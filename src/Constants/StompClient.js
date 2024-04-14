@@ -1,7 +1,7 @@
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 
-const stompClient = Stomp.over(new SockJS('http://localhost:8080/ws'));
+const stompClient = Stomp.over(new SockJS('http://localhost:9005/ws'));
 
 let isStompConnected = false;
 

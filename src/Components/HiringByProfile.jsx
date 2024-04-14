@@ -1,207 +1,3 @@
-// import React from 'react'
-// import Navbar from './Navbar'
-// import { useEffect, useState } from 'react'
-// import Cards from './Cards';
-// import axios from 'axios';
-// import Pagination from './Pagination';
-// import ChallengeCard from './ChallengeCard';
-// import CreateChallenge from './CreateChallenge';
-
-// const navigation = [
-//     {name : 'Create Challenge', href : 'http://localhost:3000/createchallenge', current : false},
-//     {name : 'All challenges', href : '#', current : false},
-//     {name : 'Recommended Challenges', href : 'http://localhost:3000/challenge', current : false},
-
-// ]
-
-// function classNames(...classes) {
-//     return classes.filter(Boolean).join(' ')
-// }
-// const Challenge = () => {
-
-//     const [repos, setRepos] = useState([]);
-//     const [page, setPage] = useState(0);
-//     const [showCreateChallenge, setShowCreateChallenge] = useState(false)
-
-//     const nextPage = () => {
-//         setPage(page + 1);
-//     };
-
-//     const prevPage = () => {
-//         if (page > 1) {
-//             setPage(page - 1);
-//         }
-//     };
-
-//     const fetchData = async (page) => {
-//         try {
-//             const response = await axios.post(`http://localhost:9005/challenges/getbyprofile/?username=vk17-starlord&pageNo=${page}`, {
-//                 hasLanguage: "",
-//                 hasTopic: "",
-//             });
-//             console.log('Response:', response.data);
-//             const res = response.data;
-//             setRepos(res);
-//             console.log("data: ", repos)
-//         } catch (error) {
-//             console.error('Error fetching data:', error);
-//         }
-//     };
-
-//     useEffect(()=> {
-//         fetchData(page)
-//     }, [page])
-
-
-//     return (
-
-//         <>
-//         <div className="min-h-full bg-blue-100">
-//             {/* <Navbar /> */}
-
-//             <header className="bg-blue-300 shadow h-15">
-//                 {/* <div className="flex max-w-7xl px-4 py-6 sm:px-6 lg:px-8 space-x-4">
-//                         <p>Create Challenge</p>
-//                         <p>All challenges</p>
-//                         <p>Recommended Challenges</p>
-//                     </div> */}
-//                 <div className="hidden md:block h-16 pt-3">
-//                     <div className="ml-10 flex items-baseline space-x-4">
-//                         {navigation.map((item) => (
-//                             <a
-//                                 key={item.name}
-//                                 // href={item.href}
-//                                 onClick={()=>{ setShowCreateChallenge(true) }}
-
-//                                 className={classNames(
-//                                     item.current
-//                                         ? 'bg-blue-500 text-white'
-//                                         : 'text-white hover:bg-blue-400 hover:text-white',
-//                                     'rounded-md px-3 py-2 font-sans-serif font-bold text-lg'
-//                                 )}
-//                                 aria-current={item.current ? 'page' : undefined}
-//                             >
-//                                 {item.name}
-//                             </a>
-//                         ))}
-//                     </div>
-//                 </div>
-//             </header>
-            
-//             {
-//                 !showCreateChallenge ? <>
-//                     <div className="bg-blue-100 pt-6">
-//                         {repos.map((item, index) => ( 
-//                             <div key={index} className="mb-4">
-//                                 <ChallengeCard data={item} />
-//                             </div>
-//                         ))}
-//                     </div>
-//                     <Pagination nextPage={nextPage} prevPage={prevPage} /> 
-//                 </> : <CreateChallenge />
-//             }
-
-            
-
-//         </div>
-//         </>
-//     )
-// }
-
-// export default Challenge
-
-// import React, { useEffect, useState } from 'react';
-// import { Layout, Menu } from 'antd';
-// import Navbar from './Navbar';
-// import Cards from './Cards';
-// import axios from 'axios';
-// import Pagination from './Pagination';
-// import ChallengeCard from './ChallengeCard';
-// import CreateChallenge from './CreateChallenge';
-
-// const { Header } = Layout;
-
-// const navigation = [
-//     { name: 'Create Challenge', href: 'http://localhost:3000/createchallenge', current: false },
-//     { name: 'All challenges', href: '#', current: false },
-//     { name: 'Recommended Challenges', href: 'http://localhost:3000/challenge', current: false },
-// ];
-
-// const Challenge = () => {
-//     const [repos, setRepos] = useState([]);
-//     const [page, setPage] = useState(0);
-//     const [showCreateChallenge, setShowCreateChallenge] = useState(false);
-
-//     const nextPage = () => {
-//         setPage(page + 1);
-//     };
-
-//     const prevPage = () => {
-//         if (page > 1) {
-//             setPage(page - 1);
-//         }
-//     };
-
-//     const fetchData = async (page) => {
-//         try {
-//             const response = await axios.post(`http://localhost:9005/challenges/getbyprofile/?username=vk17-starlord&pageNo=${page}`, {
-//                 hasLanguage: '',
-//                 hasTopic: '',
-//             });
-//             console.log('Response:', response.data);
-//             const res = response.data;
-//             setRepos(res);
-//             console.log('data: ', repos);
-//         } catch (error) {
-//             console.error('Error fetching data:', error);
-//         }
-//     };
-
-//     useEffect(() => {
-//         fetchData(page);
-//     }, [page]);
-
-//     return (
-//         <>
-//             <Layout className="min-h-full bg-blue-100">
-//                 <Navbar />
-//                 <Header className="bg-blue-300 shadow">
-//                     <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['0']}>
-//                         {navigation.map((item, index) => (
-//                             <Menu.Item key={index} onClick={() => setShowCreateChallenge(true)}>
-//                                 {item.name}
-//                             </Menu.Item>
-//                         ))}
-//                     </Menu>
-//                 </Header>
-//                 {!showCreateChallenge ? (
-//                     <>
-//                         <div className="bg-blue-100 pt-6">
-//                             {repos.map((item, index) => (
-//                                 <div key={index} className="mb-4">
-//                                     <ChallengeCard data={item} />
-//                                 </div>
-//                             ))}
-//                         </div>
-//                         <Pagination nextPage={nextPage} prevPage={prevPage} />
-//                     </>
-//                 ) : (
-//                     <CreateChallenge />
-//                 )}
-//             </Layout>
-//         </>
-//     );
-// };
-
-// export default Challenge;
-
-
-
-
-
-
-
-
 import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import Cards from './Cards';
@@ -214,15 +10,11 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import ManageChallenges from './ManageChallenges';
 import Friends from './Friends';
-import HackathonsByProfile from './HackathonsByProfile'
-import BountiesByProfile from './BountiesByProfile';
-import HiringByProfile from './HiringByProfile';
-import SoloByProfile from './SoloByProfile';
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
 
-const Challenge = () => {
+const HiringByProfile = () => {
     const [repos, setRepos] = useState([]);
     const [page, setPage] = useState(0);
     const [showCreateChallenge, setShowCreateChallenge] = useState(false);
@@ -245,7 +37,7 @@ const Challenge = () => {
 
     const fetchData = async (page) => {
         try {
-            const response = await axios.post(`http://localhost:9005/challenges/getAllChallengesByProfile/?username=${user.username}&pageNo=${page}`, {
+            const response = await axios.post(`http://localhost:9005/challenges/getAllHiringsByProfile/?username=${user.username}&pageNo=${page}`, {
                 hasLanguage: '',
                 hasTopic: '',
             });
@@ -292,7 +84,7 @@ const Challenge = () => {
 
 
         try {
-            const response = await axios.post(`http://localhost:9005/challenges/getAllChallengesByProfile/?username=${user.username}&pageNo=${page}`, {
+            const response = await axios.post(`http://localhost:9005/challenges/getAllHiringsByProfile/?username=${user.username}&pageNo=${page}`, {
                 hasLanguage: seleted,
                 hasTopic: "",
             });
@@ -312,7 +104,7 @@ const Challenge = () => {
 
 
         try {
-            const response = await axios.post(`http://localhost:9005/challenges/getAllChallengesByProfile/?username=${user.username}&pageNo=${page}`, {
+            const response = await axios.post(`http://localhost:9005/challenges/getAllHiringsByProfile/?username=${user.username}&pageNo=${page}`, {
                 hasLanguage: "",
                 hasTopic: seleted,
             });
@@ -333,7 +125,7 @@ const Challenge = () => {
     return (
         <>
             <div >
-            <header  >
+                {/* <header  >
                     <div className="hidden md:block h-16 pt-3">
                         <div className="ml-10 flex items-baseline space-x-4">
                             <a style={{ color: "pink"}}
@@ -370,11 +162,12 @@ const Challenge = () => {
                                     'rounded-md px-3 py-2 font-sans-serif font-bold text-lg'
                                 )}
                             >
-                                Solo
+                                Hackathons
                             </a>
                         </div>
                     </div>
-                </header>
+                </header> */}
+
                 <div style={{ position: 'fixed', left: '200px', width: 'calc(100% - 200px)', height: '100vh', overflowY: 'auto', paddingBottom:"50px", borderRadius: "25px" }} >
                 {!showCreateChallenge ? (
                     <>
@@ -387,7 +180,6 @@ const Challenge = () => {
                             </select>
                     </div>
                     
-
                             {
                                 filterBy === "Languages"
 
@@ -449,7 +241,7 @@ const Challenge = () => {
                         </div>
                     </>
                 ) : (
-                    <SoloByProfile />
+                    <HiringByProfile />
                 )}
 
                 </div>
@@ -459,4 +251,4 @@ const Challenge = () => {
     );
 };
 
-export default Challenge;
+export default HiringByProfile;

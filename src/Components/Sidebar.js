@@ -30,6 +30,9 @@ const Sidebar = ({ collapsed, handleMenuClick, toggleSidebar, darkTheme }) => {
     navigate('/')
 }
 
+    const goToFriends = (e) => {
+      navigate('/friends')
+    }
 
     const submitdata = (e) => {
         e.preventDefault();
@@ -84,9 +87,9 @@ const Sidebar = ({ collapsed, handleMenuClick, toggleSidebar, darkTheme }) => {
         <Menu.Item key="4" icon={<UserOutlined />}>
         Profile
         </Menu.Item>
-        {/* <Menu.Item key="5" icon={<BellOutlined />}>
-        Reports
-        </Menu.Item> */}
+        <Menu.Item key="5" icon={<CodeOutlined onClick={goToFriends}/>}>
+        Friends
+        </Menu.Item>
         <Menu.Item key="6" onClick={() => {
             const confirmLogout = window.confirm("Are you sure you want to logout?");
             if (confirmLogout) {

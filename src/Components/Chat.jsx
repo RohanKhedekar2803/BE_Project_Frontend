@@ -54,7 +54,7 @@ const Chat = () => {
     }
     const getFriendsList = async () => {
       try {
-        const response = await fetch('http://localhost:8080/getActiveUsers');
+        const response = await fetch('http://localhost:9005/getActiveUsers');
         if (!response.ok) {
           throw new Error('Network response was not ok.');
         }
