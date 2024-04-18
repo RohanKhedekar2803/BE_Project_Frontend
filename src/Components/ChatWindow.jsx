@@ -35,8 +35,8 @@ const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
   }
   return (
     <>
-      <div className="bg-white shadow-md rounded-lg">
-        <h2 className="text-lg font-semibold p-4">{selectedFriend}</h2>
+     <div style={{  borderRadius: "25px", padding: "30px", background: "#dcadde"}}>
+        <h2 style={{ color: "Purple", fontSize: "20px"}}>{selectedFriend}</h2>
         <div className="p-4 h-80 overflow-y-auto">
           {messages.map((message) => (
             
@@ -46,17 +46,17 @@ const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
                 className={message.senderId === user.username ? 'flex items-end justify-end' : 'flex items-start'}
               >
                 <div
-                  className={message.senderId === user.username ? 'bg-gray-200 rounded-lg p-2' : 'bg-gray-200 rounded-lg p-2'}
+                  className={message.senderId === user.username ? 'bg-purple-200 rounded-lg p-2' : 'bg-pink-200 rounded-lg p-2'}
                 >
                   <p className="text-sm">{message.content}</p>
-                  <p className="text-xs text-gray-500 text-right">{`${message.senderId === user.username ? 'You' : message.senderId}, ${message.timeStamp}`}</p>
+                  <p className="text-xs bg-violet-200  text-violet-500 text-right">{`${message.senderId === user.username ? 'You' : message.senderId}, ${message.timeStamp}`}</p>
                 </div>
               </div>
             )
           ))}
         </div>
         <div className=' flex'>
-          <button className=" px-4 py-2 m-4 mx-2  bg-blue-500 text-white rounded-md " onClick={handleBack}>
+          <button className=" px-4 py-2 m-4 mx-2  bg-purple-500 text-white rounded-md " onClick={handleBack}>
             Back
           </button>
           <div className='m-2 p-2'>
@@ -67,7 +67,7 @@ const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
                   id="Nickname"
                   name="Nickname"
                   type="text"
-                  className="peer placeholder-transparent h-10 w-full border border-gray-400 text-gray-900 focus:outline-none focus:border-rose-600"
+                  className="peer bg-pink-200 h-10 w-full border border-gray-400 text-gray-900 focus:outline-none focus:border-rose-600"
                   placeholder="Nickname"
                 />
                 <label
@@ -77,7 +77,7 @@ const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
                   Nickname
                 </label>
           </div>
-          <button className=" px-4 py-2 m-4 mx-2  bg-blue-500 text-white rounded-md " onClick={sendMessage}>
+          <button className=" px-4 py-2 m-4 mx-2  bg-purple-500 text-white rounded-md " onClick={sendMessage}>
             Send
           </button>
         </div>

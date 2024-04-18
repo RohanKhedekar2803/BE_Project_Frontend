@@ -108,23 +108,26 @@ const Chat = () => {
 
 
   return (
-    <div className="bg-gray-100 flex flex-col lg:flex-row">
-      <div className={`w-full lg:w-1/4 bg-gray-200 p-4 ${selectedFriend ? 'hidden lg:block' : 'block'}`}>
-        <h2 className="text-lg font-semibold mb-4">Friends</h2>
+    <div>
+      <header style={{padding:"5px", display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+      <div className={` p-4 ${selectedFriend ? 'hidden lg:block' : 'block'}`}>
+      <h1 style={{ paddingLeft:"20px"}} className="text-2xl tracking-tight text-pink-200">Friends</h1>
         <ul className="friends-list overflow-auto max-h-96">
           {friendsList.map((friend, index) => (
             <li
               key={index}
-              className="friend-item text-blue-500 hover:text-blue-700 py-2 px-3 rounded-md transition duration-300 ease-in-out cursor-pointer"
+              className="friend-item text-purple-300 hover:text-blue-300 cursor-pointer"
               onClick={() => handleFriendClick(friend)}
             >
               {friend}
             </li>
           ))}
         </ul>
-      </div>
+      </div>       
+      </header>
+     
 
-      <div className={`flex-1 p-4 ${selectedFriend ? 'w-full lg:w-3/4' : 'hidden lg:block'}`}>
+     <div style={{  left: '200px', width: 'calc(100% - 200px)', paddingBottom:"40px", borderRadius: "25px", padding: "30px", background: "#ebc9e1"}}>
         {selectedFriend && (
           <ChatWindow selectedFriend={selectedFriend} messages={newMessages} handleBack={handleBack}
           setMessages={setNewMessages} />

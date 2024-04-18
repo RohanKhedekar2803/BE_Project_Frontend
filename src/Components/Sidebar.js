@@ -87,7 +87,7 @@ const Sidebar = ({ collapsed, handleMenuClick, toggleSidebar, darkTheme }) => {
         <Menu.Item key="4" icon={<UserOutlined />}>
         Profile
         </Menu.Item>
-        <Menu.Item key="5" icon={<CodeOutlined onClick={goToFriends}/>}>
+        <Menu.Item key="5" icon={<CodeOutlined/>}>
         Friends
         </Menu.Item>
         <Menu.Item key="6" onClick={() => {

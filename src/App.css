@@ -92,6 +92,10 @@
 .ant-menu-dark .ant-menu-item-selected, .ant-menu-dark .ant-menu-item-selected {
   background-color: #b99eb1;
 }
+
+.ant-card .ant-card-head .ant-card-head-title{
+  color:"pink"
+}
 .logo {
   height: 32px;
   background: rgba(255, 255, 255, 0.2);

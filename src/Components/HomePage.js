@@ -7,6 +7,7 @@ import Chat from './Chat';
 import Dashboard from './Dashboard';
 import Challenge from './Challenge';
 import ProfilePage from './ProfilePage';
+import Friends from './Friends';
 
 const { Content } = Layout;
 
@@ -52,6 +53,9 @@ const HomePage = () => {
           ) : selectedMenuItem === '3' ? (
             <div style={{ position: 'fixed', width: '100%', height: '100vh', overflowY: 'auto', backgroundColor: darkTheme ? "#43244f" : "#ffe0ff", borderRadius: "25px" }} >
             <Chat /></div>
+          ) : selectedMenuItem === '5' ? (
+            <div style={{ position: 'fixed', width: '100%', height: '100vh', overflowY: 'auto', backgroundColor: darkTheme ? "#43244f" : "#ffe0ff", borderRadius: "25px" }} >
+            <Friends /></div>
           ) : null}
         </Content>
       </Layout>
