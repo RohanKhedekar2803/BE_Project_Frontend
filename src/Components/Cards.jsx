@@ -32,7 +32,7 @@ export default function HorizontalCard({ data }) {
                     <Typography variant="h5" color="#8b3a56" className="mb-2 font-bold font-sans-serif">
                         {data?.description}
                     </Typography>
-                    <Typography color="#8b3a56" className="mb-2 font-bold font-sans-serif">
+                    {/* <Typography color="#8b3a56" className="mb-2 font-bold font-sans-serif">
                         Language : {data?.language}
                     </Typography>
 
@@ -53,7 +53,7 @@ export default function HorizontalCard({ data }) {
                         <button style={{ background: "#bb6583"}} className=" hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             See More
                         </button>
-                    </a>
+                    </a> */}
 
 
                 </CardBody>

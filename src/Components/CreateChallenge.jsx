@@ -1,23 +1,27 @@
 
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import { Button } from 'antd';
+import { useSelector, useDispatch } from 'react-redux'
+
 
 
 export default function CreateChallenge() {
+    const { user } = useSelector((state) => state.auth)
+
 
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        createdBy: '',
+        createdBy: user.username,
         nameOfOrganization: '',
         nameChallenge: '',
         problemStatement: '',
         description: '',
         githubUrl: '',
         language: '',
-        topics: '',
+        topics: [],
         startDateAndTime: '',
         endDateAndTime: '',
         createdAt: '',
@@ -26,8 +30,14 @@ export default function CreateChallenge() {
         salaryPerYear: 0,
         theme: '',
         prize: 0,
-        challengeType : ""
+        challengeType : "",
+        relatedLinks: [
+            "string"
+          ],
     });
+    const [topicsfilter, setTopics] = useState([]);
+
+
 
     const onChange = (e) => {
         setFormData((prevState) => ({
@@ -44,22 +54,64 @@ export default function CreateChallenge() {
     }
 
     const postChallenge = async (data) => {
+        console.log(data)
         try {
-            const response = await axios.post('http://localhost:9005/challenges/save', data);
+            const response = await axios.post(`http://localhost:9005/challenges/save/${user.username}`,data );
             console.log('Response:', response)
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     };
 
-    const handleSubmit = (e) => {
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     // http://localhost:9005/challenges/save
+    //     postChallenge(formData)
+    //     navigate('/challenge')
+    //     console.log(formData)
+    // }
+    const stringifyArrayWithSingleQuotes = (arr) => {
+        return '[' + arr.map(item => `'${item}'`).join(', ') + ']';
+      };
+      
+      const handleSubmit = (e) => {
         e.preventDefault();
-        // http://localhost:9005/challenges/save
-        postChallenge(formData)
-        navigate('/challenge')
-        console.log(formData)
-    }
+        const topicsString = stringifyArrayWithSingleQuotes(formData.topics); // Convert topics array to string
+        const updatedFormData = { ...formData, topics: topicsString }; // Update formData with the stringified topics
+        postChallenge(updatedFormData);
+        console.log(updatedFormData);
+      };
+      
 
+    const fetchLanguagesAndTopics = async () => {
+        try {
+            const topics = await axios.get(`http://localhost:9005/utils/gettopics`);
+            setTopics(topics.data)
+            console.log(topics.data)
+        } catch (error) {
+            console.error('Error fetching languages or topics:', error);
+        }
+    };
+    useEffect(() => {
+        fetchLanguagesAndTopics()
+    }, [])
+    
+
+
+    const handleSelecttopicChange = async (e) => {
+        console.log("value", e.target.value);
+        setFormData((prevState) => {
+            const updatedTopics = Array.isArray(prevState.topics) ? 
+                [...prevState.topics, e.target.value] : 
+                [e.target.value];
+            console.log("Updated topics:", updatedTopics);
+            return {
+                ...prevState,
+                topics: updatedTopics
+            };
+        });
+    };
+    
 
     return (
         <form onSubmit={handleSubmit}
@@ -322,7 +374,7 @@ export default function CreateChallenge() {
                                 Topics
                             </label>
                             <div className="mt-2">
-                                <input
+                                {/* <input
                                     type="text"
                                     name="topics"
                                     value={formData.topics}
@@ -330,7 +382,18 @@ export default function CreateChallenge() {
                                     id="topics"
                                     autoComplete="address-level2"
                                     className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                /> */}
+                                                                    <div style={{ paddingLeft:"20px"}}>
+                                    <label style={{ color:"pink" }}>Filter by Topic   :</label>
+                                    <select style={{ color:"pink", background:"#2a1433" }} id="mySelect" onChange={handleSelecttopicChange} >
+                                        <option style={{ color:"pink", background:"#2a1433" }} value="">Select an option</option>
+                                        {topicsfilter.map((option, index) => (
+                                            <option style={{ color:"pink", background:"#2a1433" }} key={index} value={option.topicname}>
+                                                {option.topicname}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>

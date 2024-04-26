@@ -22,7 +22,7 @@ const ManageChallenges = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://localhost:9005/challenges/getOrganizationsChallenges/string`);
+            const response = await axios.get(`http://localhost:9005/challenges/getOrganizationsChallenges/${user.username}`);
             console.log('Response:', response.data);
             const res = response.data;
             setRepos(res);

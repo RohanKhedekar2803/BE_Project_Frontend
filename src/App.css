@@ -69,6 +69,7 @@
   
 }
 
+
 .header {
   padding: 0;
   display: flex;
@@ -95,6 +96,9 @@
 
 .ant-card .ant-card-head .ant-card-head-title{
   color:"pink"
+}
+.ant-modal .ant-modal-content {
+  background-color: #ab5781;
 }
 .logo {
   height: 32px;

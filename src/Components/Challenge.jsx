@@ -588,23 +588,18 @@ const Challenge = () => {
             <header  >
                     <div className="hidden md:block h-16 pt-3">
                         <div className="ml-10 flex items-baseline space-x-4">
-                            <a style={{ color: "pink"}}
+                       
+
+                        {user.isOrganization ? (<>
+                            <a
+                                style={{ color: "pink" }}
                                 onClick={() => setShowCreateChallenge("create")} // Adjusted onClick to show CreateChallenge
                                 className={classNames(
-                                    'text-white hover:bg-blue-400 hover:text-white',
-                                    'rounded-md px-3 py-2 font-sans-serif font-bold text-lg'
+                                'text-white hover:bg-blue-400 hover:text-white',
+                                'rounded-md px-3 py-2 font-sans-serif font-bold text-lg'
                                 )}
                             >
                                 Create Challenge
-                            </a>
-                            <a style={{ color: "pink"}}
-                            onClick={() => setShowCreateChallenge("all")}
-                                className={classNames(
-                                    'text-white hover:bg-blue-400 hover:text-white',
-                                    'rounded-md px-3 py-2 font-sans-serif font-bold text-lg'
-                                )}
-                            >
-                                All challenges
                             </a>
                             <a style={{ color: "pink"}}
                             onClick={() => setShowCreateChallenge("manage")}
@@ -615,6 +610,22 @@ const Challenge = () => {
                             >
                                 Manage Challenges
                             </a>
+
+                        </>
+                           
+                            
+                            ) : null}
+
+                            <a style={{ color: "pink"}}
+                            onClick={() => setShowCreateChallenge("all")}
+                                className={classNames(
+                                    'text-white hover:bg-blue-400 hover:text-white',
+                                    'rounded-md px-3 py-2 font-sans-serif font-bold text-lg'
+                                )}
+                            >
+                                All challenges
+                            </a>
+                         
                             <a style={{ color: "pink"}}
                             onClick={() => setShowCreateChallenge("solo")}
                                 className={classNames(
@@ -623,6 +634,33 @@ const Challenge = () => {
                                 )}
                             >
                                 Solo
+                            </a>
+                            <a style={{ color: "pink"}}
+                            onClick={() => setShowCreateChallenge("bounty")}
+                                className={classNames(
+                                    'text-white hover:bg-blue-400 hover:text-white',
+                                    'rounded-md px-3 py-2 font-sans-serif font-bold text-lg'
+                                )}
+                            >
+                                Bounties
+                            </a>
+                            <a style={{ color: "pink"}}
+                            onClick={() => setShowCreateChallenge("hiring")}
+                                className={classNames(
+                                    'text-white hover:bg-blue-400 hover:text-white',
+                                    'rounded-md px-3 py-2 font-sans-serif font-bold text-lg'
+                                )}
+                            >
+                                Hiring
+                            </a>
+                            <a style={{ color: "pink"}}
+                            onClick={() => setShowCreateChallenge("hackathon")}
+                                className={classNames(
+                                    'text-white hover:bg-blue-400 hover:text-white',
+                                    'rounded-md px-3 py-2 font-sans-serif font-bold text-lg'
+                                )}
+                            >
+                                Hackathons
                             </a>
                         </div>
                     </div>
@@ -690,12 +728,18 @@ const Challenge = () => {
 
                         </div>
                     </>
-                ) : showCreateChallenge=="create" ?  (<>
+                ) : showCreateChallenge=="create" && user.isOrganization==true ?  (<>
                 <CreateChallenge />
-                    </>): showCreateChallenge =="manage" ? (
+                    </>): showCreateChallenge =="manage" && user.isOrganization==true ? (
                         <ManageChallenges />
                     ) :  showCreateChallenge =="solo" ? (
                         <SoloByProfile />
+                    ) :  showCreateChallenge =="bounty" ? (
+                        <BountiesByProfile />
+                    ) :  showCreateChallenge =="hiring" ? (
+                        <HiringByProfile />
+                    ) :  showCreateChallenge =="hackathon" ? (
+                        <HackathonsByProfile />
                     ) : null
                 
                 

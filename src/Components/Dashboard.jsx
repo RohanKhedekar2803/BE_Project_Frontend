@@ -142,7 +142,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import Pagination from './Pagination';
 import Spinner from './Spinner';
 import SearchBar from './SearchBar'
-
+import { Modal, Typography } from 'antd'; // Import the Modal component from Ant Design
 
 const Dashboard = () => {
 
@@ -158,6 +158,8 @@ const Dashboard = () => {
     const [topic, setTopic] = useState("")
     const [lang, setLang] = useState("")
     const [isLang, setIsLang] = useState(false)
+    const [modalVisible, setModalVisible] = useState(false); // State to manage modal visibility
+    const [cardData, setCardData] = useState(null); // State to store selected card data
 
     const nextPage = () => {
         setPage(page + 1);
@@ -316,23 +318,10 @@ const Dashboard = () => {
 
     }, [lang])
 
-
-    // const submitdata = (e) => {
-    //     e.preventDefault();
-    //     // var user=usercontext.username
-    //     var username = user.nickname
-    //     const userObject = {
-    //         senderId: username,
-    //         content: `user ${username} have joined the chat`
-    //     };
-
-    //     stompClient.send(
-    //         '/app/user.addUser',
-    //         JSON.stringify(userObject),
-    //         {});
-    //     navigate('/chat');
-    // };
-
+    const handleCardClick = (cardData) => {
+        setCardData(cardData); // Set the selected card data
+        setModalVisible(true); // Open the modal
+    };
 
     return (
         <>           
@@ -340,133 +329,71 @@ const Dashboard = () => {
                 {
                     repos ? (
                         <div>
-                            {/* <header >
-                                <div className="max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                                    <h1 className="text-2xl tracking-tight text-pink-200">Recommended Projects</h1>
-                            <label style={{ color:"pink" }}>Filter By  :</label>
-                            <select style={{ color:"pink", background:"#2a1433" }} onChange={handleFilterChange}>
-                                <option value="" style={{ color:"pink", background:"#2a1433" }} >Select an option</option>
-                                <option value="Languages" style={{ color:"pink", background:"#2a1433" }}>Languages</option>
-                                <option value="Topics" style={{ color:"pink", background:"#2a1433" }}>Topics</option>
-                            </select>
-
-                            {
-                                filterBy === "Languages"
-
-                                    ?
-
-                                    <div >
-                                        <label style={{ color:"pink" }}>Filter by language   :</label>
-                                        <select style={{ color:"pink", background:"#2a1433" }} id="mySelect" onChange={handleSelectlanguageChange} >
-                                            <option style={{ color:"pink", background:"#2a1433" }} value="">Select an option</option>
-                                            {languagesfilter.map((option, index) => (
-                                                <option style={{ color:"pink", background:"#2a1433" }} key={index} value={option.languageName}>
-                                                    {option.languageName}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-
-                                    : null
-                            }
-
-                            {
-                                filterBy === "Topics" ?
-                                    <div>
-                                        <label className='text-black'>Filter by topic</label>
-                                        <select id="mySelect" onChange={handleSelecttopicChange} className='text-black'>
-                                            <option value="">Select an option</option>
-                                            {topicsfilter.map((option, index) => (
-                                                <option key={index} value={option.topicName}>
-                                                    {option.topicName}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    :
-
-                                    null
-                            }
-
-                                </div>
-                            </header> */}
-                            <header style={{padding:"5px", display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                                <h1 style={{ paddingLeft:"20px"}} className="text-2xl tracking-tight text-pink-200">Recommended Projects</h1>
-                                <div style={{ paddingRight:"20px" }} >
-                                    <label style={{ color:"pink" }}>Filter By  :</label>
-                                    <select style={{ color:"pink", background:"#2a1433"}} onChange={handleFilterChange}>
-                                        <option value="" style={{ color:"pink", background:"#2a1433" }} >Select an option</option>
-                                        <option value="Languages" style={{ color:"pink", background:"#2a1433" }}>Languages</option>
-                                        <option value="Topics" style={{ color:"pink", background:"#2a1433" }}>Topics</option>
-                                    </select>
-                                    {filterBy === "Languages" && (
-                                        <div>
-                                            <label style={{ color:"pink" }}>Filter by language   :</label>
-                                            <select style={{ color:"pink", background:"#2a1433" }} id="mySelect" onChange={handleSelectlanguageChange}>
-                                                <option style={{ color:"pink", background:"#2a1433" }} value="">Select an option</option>
-                                                {languagesfilter.map((option, index) => (
-                                                    <option style={{ color:"pink", background:"#2a1433" }} key={index} value={option.languageName}>
-                                                        {option.languageName}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    )}
-                                    {filterBy === "Topics" && (
-                                        <div>
-                                            <label className='text-black'>Filter by topic</label>
-                                            <select id="mySelect" onChange={handleSelecttopicChange} className='text-black'>
-                                                <option value="">Select an option</option>
-                                                {topicsfilter.map((option, index) => (
-                                                    <option key={index} value={option.topicname}>
-                                                        {option.topicname}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    )}
-                                </div>
-
+                          
+                          <header style={{ padding: "5px", display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h1 style={{ paddingLeft: "20px" }} className="text-2xl tracking-tight text-pink-200">Recommended Projects</h1>
+                            <div style={{ paddingRight: "20px" }}>
+                                <label style={{ color: "pink" }}>Filter By:</label>
+                                <select style={{ color: "pink", background: "#2a1433" }} onChange={handleFilterChange}>
+                                <option value="" style={{ color: "pink", background: "#2a1433" }}>Select an option</option>
+                                <option value="Languages" style={{ color: "pink", background: "#2a1433" }}>Languages</option>
+                                <option value="Topics" style={{ color: "pink", background: "#2a1433" }}>Topics</option>
+                                </select>
+                                {filterBy === "Languages" && (
                                 <div>
-                                            <label className='text-black'>Sort by</label>
-                                            <select id="mySelect" onChange={handleSortChange} className='text-black'>
-                                                <option value="">Select an option</option>
-                                                <option value="stars">by popularity</option>
-                                                <option value="size">by size</option>
-                                                <option value="forks">most contributed</option>
-                                                <option value="createdAt">newestFirst</option>
-                                            </select>
-                                        </div>
+                                    <label style={{ color: "pink" }}>Filter by language  :</label>
+                                    <select style={{ color: "pink", background: "#2a1433" }} id="mySelect" onChange={handleSelectlanguageChange}>
+                                    <option style={{ color: "pink", background: "#2a1433" }} value="">Select an option</option>
+                                    {languagesfilter.map((option, index) => (
+                                        <option style={{ color: "pink", background: "#2a1433" }} key={index} value={option.languageName}>
+                                        {option.languageName}
+                                        </option>
+                                    ))}
+                                    </select>
+                                </div>
+                                )}
+                                {filterBy === "Topics" && (
+                                <div>
+                                    <label style={{ color: "pink", background: "#2a1433" }}  className="text-pink-200">Filter by Topic</label>  {/* Style changed to match "Recommended Projects" */}
+                                    <select style={{ color: "pink", background: "#2a1433" }} id="mySelect" onChange={handleSelecttopicChange} className="text-pink-200">  {/* Style changed to match "Recommended Projects" */}
+                                    <option style={{ color: "pink", background: "#2a1433" }} value="">Select an option</option>
+                                    {topicsfilter.map((option, index) => (
+                                        <option key={index} value={option.topicname}>
+                                        {option.topicname}
+                                        </option>
+                                    ))}
+                                    </select>
+                                </div>
+                                )}
+                            </div>
+
+                            <div>
+                                <label style={{ color: "pink", background: "#2a1433" }} className="text-pink-200">Sort By</label>  {/* Style changed to match "Recommended Projects" */}
+                                <select style={{ color: "pink", background: "#2a1433" }}  id="mySelect" onChange={handleSortChange} className="text-pink-200">  {/* Style changed to match "Recommended Projects" */}
+                                <option style={{ color: "pink", background: "#2a1433" }} value="">Select an option</option>
+                                <option style={{ color: "pink", background: "#2a1433" }} value="stars">by popularity</option>
+                                <option style={{ color: "pink", background: "#2a1433" }} value="size">by size</option>
+                                <option style={{ color: "pink", background: "#2a1433" }}  value="forks">most contributed</option>
+                                <option style={{ color: "pink", background: "#2a1433" }}  value="createdAt">newestFirst</option>
+                                </select>
+                            </div>
                             </header>
 
-                            
-
-                            {/* <label className='text-black'>Filter by language</label>
-                            <select id="mySelect" onChange={handleSelectlanguageChange} className='text-black'>
-                                <option value="">Select an option</option>
-                                {languagesfilter.map((option, index) => (
-                                    <option key={index} value={option.languageName}>
-                                        {option.languageName}
-                                    </option>
-                                ))}
-                            </select>
-
-                            <label className='text-black'>Filter by topic</label>
-                            <select id="mySelect" onChange={handleSelecttopicChange} className='text-black'>
-                                <option value="">Select an option</option>
-                                {topicsfilter.map((option, index) => (
-                                    <option key={index} value={option.topicName}>
-                                        {option.topicName}
-                                    </option>
-                                ))}
-                            </select> */}
 
                             <div style={{ position: 'fixed', left: '200px', width: 'calc(100% - 200px)', height: '100vh', overflowY: 'auto', paddingBottom:"50px", borderRadius: "25px", padding: "50px",paddingRight:"300px", background: "#ebc9e1"}}>
-                                {repos.map((item, index) => (
-                                    <div key={index} className="mb-4">
+                                {/* {repos.map((item, index) => (
+                                    <div onClick={handleCardClick} key={index} className="mb-4">
                                         <Cards data={item} />
                                     </div>
+                                ))} */}
+                                {repos.map((item, index) => (
+                                    <div key={index} className="mb-4">
+                                        <div onClick={() => handleCardClick(item)}>
+                                            <Cards data={item} />
+                                        </div>
+                                    </div>
                                 ))}
+
                             <Pagination nextPage={nextPage} prevPage={prevPage} />
 
                             </div>
@@ -474,19 +401,63 @@ const Dashboard = () => {
                         </div>
                     ) : <Spinner />
                 }
-                {/* <div className="bg-blue-100">
-                    {repos.map((item, index) => (
-                        <div key={index} className="mb-4">
-                            <Cards data={item} />
+
+                <Modal
+                    title={
+                        <div style={{ background: "#ab5781"}} >
+                            <Typography variant="h5" style={{ color:"white"}}className="mb-4 uppercase font-bold font-sans-serif">
+                                {cardData?.name}
+                            </Typography>
                         </div>
-                    ))}
-                </div> */}
+                    }
+                    visible={modalVisible} // Visibility controlled by modalVisible state
+                    onCancel={() => setModalVisible(false)} // Function to handle modal closing
+                    footer={null} // Hide the footer
+                >          
+                <div style={{ background: "rgb(235 171 193)", color: "#713d71", borderRadius: "10px"}}  className="p-4" >
+                <Typography style={{fontSize:"17px", color:"rgb(147 0 86 / 88%)"}}  className="mb-2 font-bold font-sans-serif">
+                        {cardData?.description}
+                    </Typography>
+                    <Typography color="#8b3a56" className="mb-2 font-bold font-sans-serif">
+                        Language : {cardData?.language}
+                    </Typography>
 
-                {/* <div className="flex justify-between mt-4">
-                    <button onClick={prevPage}>Previous Page</button>
-                    <button onClick={nextPage}>Next Page</button>
-                </div> */}
+                    <div style={{color:"#8b3a56" }} className="w-full flex space-x-4">
+                        <Typography color="#8b3a56" className="mb-2 font-bold font-sans-serif flex-grow">
+                            Stars : {cardData?.stars}
+                        </Typography>
+                        <Typography color="#8b3a56" className="mb-2 font-bold font-sans-serif flex-grow">
+                            Forks : {cardData?.forks}
+                        </Typography>
+                        <Typography color="#8b3a56" className="mb-2 font-bold font-sans-serif flex-grow">
+                            Size : {cardData?.size}
+                        </Typography>
+                    </div>
 
+                    <Typography color="#8b3a56" className="mb-2 font-bold font-sans-serif">
+                        Website :<a href={cardData?.homepage} target="_blank" rel="noopener noreferrer">
+            {cardData?.homepage}
+          </a>
+                    </Typography>
+                    
+                    <Typography color="#8b3a56" className="mb-2 font-bold font-sans-serif">
+                        Topics:
+                        <ul>
+                            {cardData?.topics.match(/'([^']+)'/g).map((topic, index) => (
+                                <li key={index}>{topic.replace(/'/g, '')}</li>
+                            ))}
+                        </ul>
+                    </Typography>
+
+
+                    <a href={cardData?.url} target="_blank" className="">
+                        <button style={{ background: "#bb6583"}} className=" hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            See More
+                        </button>
+                    </a>
+                    </div>          
+                        
+                </Modal>
             </div>
         </>
     )

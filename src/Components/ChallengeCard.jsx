@@ -107,7 +107,7 @@ const ChallengeCard = ({ data }) => {
                         user.isOrganization
                             ?
                             <div>
-                                <a onClick={updateCard} target="_blank" className="" >
+                                {/* <a onClick={updateCard} target="_blank" className="" >
                                     <button  style={{ background: "#bb6583"}} className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                         Update
                                     </button>
@@ -116,7 +116,7 @@ const ChallengeCard = ({ data }) => {
                                     <button  style={{ background: "red"}} className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                         Delete
                                     </button>
-                                </a>
+                                </a> */}
                             </div>
                             :
                             null

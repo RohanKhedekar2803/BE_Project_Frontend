@@ -203,8 +203,6 @@
 
 
 // export default Register
-
-
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -242,19 +240,38 @@ const Register = () => {
         dispatch(reset());
     }, [user, isError, isSuccess, navigate, dispatch]);
 
+    // const onFinish = (values) => {
+    //   console.log("values", values)
+    //     dispatch(register(values));
+    // };
     const onFinish = (values) => {
-        dispatch(register(values));
+      console.log("values", values);
+      const updatedValues = { ...values, isOrganization: formData.isOrganization };
+      dispatch(register(updatedValues));
     };
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
 
+    // const handleCheckBox = (e) => {
+    //     setFormData((prevState) => ({
+    //         ...prevState,
+    //         isOrganization: e.target.checked
+    //     }));
+    //     console.log("formData",formData)
+    //     console.log("e.target.checked",e.target.checked)
+    // };
     const handleCheckBox = (e) => {
-        setFormData((prevState) => ({
-            ...prevState,
-            isOrganization: e.target.checked
-        }));
+      const isChecked = e.target.checked;
+      setFormData((prevState) => ({
+        ...prevState,
+        isOrganization: isChecked
+      }));
+      // Update form data as well
+      form.setFieldsValue({ isOrganization: isChecked });
+              console.log("formData",formData)
+        console.log("e.target.checked",e.target.checked)
     };
 
     if (isLoading) {
@@ -370,4 +387,3 @@ const Register = () => {
 };
 
 export default Register;
-
