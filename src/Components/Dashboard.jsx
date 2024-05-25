@@ -195,15 +195,15 @@ const Dashboard = () => {
 
     const handleSelecttopicChange = async (event) => {
         const selectedOption = event.target.value;
-        const seleted = selectedOption.substring(1, selectedOption.length - 1);
-        setTopic(seleted)
+        // const seleted = selectedOption.substring(1, selectedOption.length - 1);
+        setTopic(selectedOption)
         setIsLang(false)
-        console.log(seleted)
+        console.log(selectedOption)
 
         try {
             const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}&sortBy=${sortBy}`, {
                 hasLanguage: "",
-                hasTopic: seleted,
+                hasTopic: selectedOption,
             });
             // Process the API response as needed
             const dataArray = response.data.content;
