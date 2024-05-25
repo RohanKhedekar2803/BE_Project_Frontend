@@ -136,13 +136,13 @@ const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
           {messages.map((message) => (
             <div
               key={message.id}
-              className={message.senderId === user.username ? 'flex items-end justify-end' : 'flex items-start'}
+              className={message.senderId === user.username ? 'flex pr-40  items-end justify-end' : 'flex items-start'}
             >
               <div
                 className={message.senderId === user.username ? 'bg-purple-200 rounded-lg p-2' : 'bg-pink-200 rounded-lg p-2'}
               >
                 <p className="text-sm">{message.content}</p>
-                <p className="text-xs bg-violet-200 text-violet-500 text-right">{`${message.senderId === user.username ? 'You' : message.senderId}, ${message.timeStamp}`}</p>
+                <p className="text-xs bg-violet-200 text-black text-right">{`${message.senderId === user.username ? 'You' : message.senderId}, ${message.timeStamp}`}</p>
               </div>
             </div>
           ))}
