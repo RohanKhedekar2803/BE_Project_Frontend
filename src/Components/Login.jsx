@@ -171,18 +171,16 @@
 
 
 
-
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Input, Button, Form, Row, Col, Card, Typography, Layout } from 'antd';
+import { Input, Button, Form, Row, Col, Card, Layout } from 'antd';
 import { login, reset } from '../features/auth/authSlice';
 import { Spinner } from '@material-tailwind/react';
 import { toast } from 'react-toastify';
 import { stompClient } from '../Constants/StompClient';
 
 const { Header, Content } = Layout;
-const { Title } = Typography;
 
 const Login = () => {
     const [form] = Form.useForm();
@@ -195,12 +193,13 @@ const Login = () => {
         if (isError) {
             toast.error(message);
             setIsLoading(false);
+            alert('Enter correct username or password');
         }
         if (isSuccess) {
             navigate('/dashboard');
         }
         dispatch(reset());
-    }, [user, isError, isSuccess, navigate, dispatch]);
+    }, [user, isError, isSuccess, message, navigate, dispatch]);
 
     const onFinish = async (values) => {
         setIsLoading(true);
@@ -209,7 +208,7 @@ const Login = () => {
             const name = user?.username;
             const userObject = {
                 senderId: name,
-                content: `user ${name} have joined the chat`
+                content: `user ${name} has joined the chat`
             };
             stompClient.send(
                 '/app/user.addUser',
