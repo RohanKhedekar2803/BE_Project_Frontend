@@ -186,8 +186,23 @@ const Dashboard = () => {
             });
             // Process the API response as needed
             const dataArray = response.data.content;
-            setRepos(dataArray);
-            console.log("data", dataArray)
+            
+            if(seleted==='java' || seleted==='Java'){
+                console.log("in ")
+                let filteredArray =[]
+                for (let i = 0; i < dataArray.length; i++) {
+                    if (!dataArray[i].language.toLowerCase().includes('JavaScript'.toLowerCase())) {
+                      filteredArray.push(dataArray[i]);
+                    }
+                  }
+               
+                setRepos(filteredArray);
+                console.log(filteredArray)
+            }else{
+                setRepos(dataArray);
+                console.log("data", dataArray)
+            }
+            
         } catch (error) {
             console.error('Error calling API:', error);
         }
