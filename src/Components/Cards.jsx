@@ -22,38 +22,38 @@ export default function HorizontalCard({ data }) {
         </CardHeader> */}
 
             
-                <div className="bg-blue-400 pl-3 pt-3 rounded-tl-md rounded-tr-md">
-                    <Typography variant="h5" color="gray" className="mb-4 uppercase font-bold font-sans-serif">
+                <div style={{ background: "#bb6583"}} className=" pl-3 pt-3 rounded-tl-xl rounded-tr-xl">
+                    <Typography variant="h5" color="white" className="mb-4 uppercase font-bold font-sans-serif">
                         {data?.name}
                     </Typography>
                 </div>
-                <CardBody className="p-4 bg-white rounded-br-md rounded-bl-md">
+                <CardBody style={{ background: "rgb(235 171 193)", color: "#713d71"}}  className="p-4 rounded-br-md rounded-bl-md">
 
-                    <Typography variant="h5" color="blue-gray" className="mb-2 font-bold font-sans-serif">
+                    <Typography variant="h5" color="#8b3a56" className="mb-2 font-bold font-sans-serif">
                         {data?.description}
                     </Typography>
-                    <Typography color="gray" className="mb-2 font-bold font-sans-serif">
+                    {/* <Typography color="#8b3a56" className="mb-2 font-bold font-sans-serif">
                         Language : {data?.language}
                     </Typography>
 
-                    <div className="w-full flex space-x-4">
-                        <Typography color="gray" className="mb-2 font-bold font-sans-serif flex-grow">
+                    <div style={{color:"#8b3a56" }} className="w-full flex space-x-4">
+                        <Typography color="#8b3a56" className="mb-2 font-bold font-sans-serif flex-grow">
                             Stars : {data?.stars}
                         </Typography>
-                        <Typography color="gray" className="mb-2 font-bold font-sans-serif flex-grow">
+                        <Typography color="#8b3a56" className="mb-2 font-bold font-sans-serif flex-grow">
                             Forks : {data?.forks}
                         </Typography>
-                        <Typography color="gray" className="mb-2 font-bold font-sans-serif flex-grow">
+                        <Typography color="#8b3a56" className="mb-2 font-bold font-sans-serif flex-grow">
                             Size : {data?.size}
                         </Typography>
                     </div>
 
 
                     <a href={data?.url} target="_blank" className="">
-                        <button className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <button style={{ background: "#bb6583"}} className=" hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             See More
                         </button>
-                    </a>
+                    </a> */}
 
 
                 </CardBody>

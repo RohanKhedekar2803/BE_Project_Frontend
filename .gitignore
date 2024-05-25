@@ -12,6 +12,8 @@
 /build
 
 # misc
+/src/assets/
+.env
 .DS_Store
 .env.local
 .env.development.local

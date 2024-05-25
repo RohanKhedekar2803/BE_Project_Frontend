@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+
+import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
 import {
     Card,
@@ -13,6 +15,7 @@ import {
 const ChallengeCard = ({ data }) => {
 
     const navigate = useNavigate();
+    const { user } = useSelector((state) => state.auth)
     // const initalData = data;
     const navigation = [
         { name: 'See More', href: data?.githubUrl },
@@ -21,7 +24,7 @@ const ChallengeCard = ({ data }) => {
     ]
 
     const updateCard = () => {
-        navigate('/updatechallenge', { state : { initialData : data} });
+        navigate('/updatechallenge', { state: { initialData: data } });
     }
 
 
@@ -29,37 +32,26 @@ const ChallengeCard = ({ data }) => {
         // http://localhost:9005/challenges/${formData.id}
         e.preventDefault();
         try {
-          await axios.delete(`http://localhost:9005/challenges/${data.id}`);
-          console.log('Deleted resource');
-          window.location.reload();
-          // Handle success, update UI or show notification
+            await axios.delete(`http://localhost:9005/challenges/${data.id}`);
+            console.log('Deleted resource');
+            window.location.reload();
+            // Handle success, update UI or show notification
         } catch (error) {
-          console.error('Error updating data:', error);
-          // Handle error, show error message
+            console.error('Error updating data:', error);
+            // Handle error, show error message
         }
     }
 
     return (
-        <Card style={{ maxWidth: '60rem', marginLeft: '15rem' }}>
-            {/* <CardHeader
-  shadow={false}
-  floated={false}
-  className="m-0 w-2/5 shrink-0 rounded-r-none"
->
-  <img
-    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
-    alt="card-image"
-    className="h-full w-full object-cover"
-  />
-</CardHeader> */}
+        <Card style={{ maxWidth: '60rem', marginLeft: '50px' }}>
 
 
-            <div className="bg-blue-400 pl-3 pt-3 rounded-tl-md rounded-tr-md">
-                <Typography variant="h5" color="gray" className="mb-4 uppercase font-bold font-sans-serif">
+            <div style={{ background: "#bb6583"}} className=" pl-3 pt-3 rounded-tl-xl rounded-tr-xl">
+                <Typography variant="h5" color="white" className="mb-4 uppercase font-bold font-sans-serif">
                     {data?.nameChallenge}
                 </Typography>
             </div>
-            <CardBody className="p-4 bg-white rounded-br-md rounded-bl-md">
+            <CardBody style={{ background: "rgb(235 171 193)", color: "#713d71"}}  className="p-4 rounded-br-md rounded-bl-md">
 
                 <Typography variant="h5" color="blue-gray" className="mb-2 font-bold font-sans-serif">
                     {data?.description}
@@ -68,7 +60,7 @@ const ChallengeCard = ({ data }) => {
                     {data?.problemStatement}
                 </Typography>
 
-                <div className="w-full flex space-x-4">
+                <div style={{color:"#8b3a56" }} className="w-full flex space-x-4">
                     <Typography color="gray" className="mb-2 font-bold font-sans-serif flex-grow">
                         Organization : {data?.nameOfOrganization}
                     </Typography>
@@ -104,22 +96,32 @@ const ChallengeCard = ({ data }) => {
                     </Typography>
                 </div>
 
-                <div className="w-full flex space-x-4">
+                <div   className="w-full flex space-x-4">
                     <a href={data?.githubUrl} target="_blank" className="">
-                        <button className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <button  style={{ background: "#bb6583"}} className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             See More
                         </button>
                     </a>
-                    <a onClick={updateCard} target="_blank" className="">
-                        <button className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Update
-                        </button>
-                    </a>
-                    <a onClick={deleteCard} target="_blank" className="">
-                        <button className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Delete
-                        </button>
-                    </a>
+
+                    {
+                        user.isOrganization
+                            ?
+                            <div>
+                                {/* <a onClick={updateCard} target="_blank" className="" >
+                                    <button  style={{ background: "#bb6583"}} className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                        Update
+                                    </button>
+                                </a>
+                                <a onClick={deleteCard} target="_blank" className="">
+                                    <button  style={{ background: "red"}} className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                        Delete
+                                    </button>
+                                </a> */}
+                            </div>
+                            :
+                            null
+
+                    }
                 </div>
 
             </CardBody>
@@ -130,3 +132,77 @@ const ChallengeCard = ({ data }) => {
 }
 
 export default ChallengeCard
+
+
+
+// import React from 'react';
+// import {useNavigate} from 'react-router-dom'
+// import { Card, Typography, Button } from 'antd';
+// import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
+// import axios from 'axios';
+
+// const { Meta } = Card;
+
+// const ChallengeCard = ({ data }) => {
+//     const navigate = useNavigate();
+
+//     const deleteCard = async () => {
+//         try {
+//             await axios.delete(`http://localhost:9005/challenges/${data.id}`);
+//             console.log('Deleted resource');
+//             window.location.reload();
+//             // Handle success, update UI or show notification
+//         } catch (error) {
+//             console.error('Error updating data:', error);
+//             // Handle error, show error message
+//         }
+//     }
+//         const updateCard = () => {
+//         navigate('/updatechallenge', { state : { initialData : data} });
+//     }
+
+//     return (
+//         <Card
+//             style={{ maxWidth: '60rem', marginLeft: '15rem' }}
+//             cover={
+//                 <img
+//                     alt="example"
+//                     src="https://example.com"
+//                 />
+//             }
+//             actions={[
+//                 <Button type="link" icon={<EyeOutlined />} href={data?.githubUrl} target="_blank">See More</Button>,
+//                 <Button type="link" icon={<EditOutlined />} onClick={updateCard}>Update</Button>,
+//                 <Button type="link" icon={<DeleteOutlined />} onClick={deleteCard}>Delete</Button>,
+//             ]}
+//         >
+//             <Meta
+//                 title={data?.nameChallenge}
+//                 description={
+//                     <>
+//                         <Typography.Paragraph>{data?.description}</Typography.Paragraph>
+//                         <Typography.Paragraph>{data?.problemStatement}</Typography.Paragraph>
+//                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+//                             <Typography.Text>Organization: {data?.nameOfOrganization}</Typography.Text>
+//                             <Typography.Text>Language: {data?.language}</Typography.Text>
+//                             <Typography.Text>Prize Amount: {data?.prize}</Typography.Text>
+//                         </div>
+//                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+//                             <Typography.Text>Max People Allowed: {data?.maxPeopleinTeam}</Typography.Text>
+//                             <Typography.Text>Min People Allowed: {data?.minPeopleinTeam}</Typography.Text>
+//                             <Typography.Text>
+//                                 {data?.isBounty ? 'Bounties on winning' : data?.isHiring ? 'Hiring chances on winning' : null}
+//                             </Typography.Text>
+//                         </div>
+//                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+//                             <Typography.Text>Starting on: {data?.startDateAndTime}</Typography.Text>
+//                             <Typography.Text>Ending on: {data?.endDateAndTime}</Typography.Text>
+//                         </div>
+//                     </>
+//                 }
+//             />
+//         </Card>
+//     );
+// }
+
+// export default ChallengeCard;
