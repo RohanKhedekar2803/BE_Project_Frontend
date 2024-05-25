@@ -11,15 +11,7 @@ const Chat = () => {
   const navigate = useNavigate();
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [friendsList, setFriendsList] = useState([]);
-  const [newMessages, setNewMessages] = useState([
-    {
-      "id": 9,
-      "chatId": null,
-      "senderId": "jk",
-      "receiverId": "ALL",
-      "content": "user jk has joined the chat",
-    }
-  ]);
+  const [newMessages, setNewMessages] = useState([]);
 
   const getTime=()=>{
     const currentDate = new Date();
@@ -37,14 +29,24 @@ const Chat = () => {
     setSelectedFriend(null);
   };
 
-  const addNewMessage = (message) => {
-    // Check if the message with the same id already exists
-    const messageExists = newMessages.some((existingMessage) => existingMessage.id === message.id);
+  // const addNewMessage = (message) => {
+  //   // Check if the message with the same id already exists
+  //   const messageExists = newMessages.some((existingMessage) => existingMessage.messageId === message.messageId);
 
-    if (!messageExists) {
+  //   if (!messageExists) {
+  //     setNewMessages((prevMessages) => [...prevMessages, message]);
+  //   }
+  // };
+  const addNewMessage = (message) => {
+    // Extract all message IDs
+    const existingMessageIds = newMessages.map((existingMessage) => existingMessage.messageId);
+  
+    // Check if the new message's ID already exists in the array
+    if (!existingMessageIds.includes(message.messageId)) {
       setNewMessages((prevMessages) => [...prevMessages, message]);
     }
   };
+  
 
 
   useEffect(() => {
@@ -59,7 +61,7 @@ const Chat = () => {
           throw new Error('Network response was not ok.');
         }
         const data = await response.json();
-        const usernames = data.map(item => item.username);
+        const usernames = data.map((item) => item.username).filter(username => username !== user.username);
         setFriendsList(usernames);
       } catch (error) {
         console.error('Error fetching data:', error);

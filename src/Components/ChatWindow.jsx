@@ -97,6 +97,8 @@ import { useSelector, useDispatch } from 'react-redux';
 const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
   const [draftMessage, setDraftMessage] = useState('');
   const { user } = useSelector((state) => state.auth);
+  const [messageCounter, setMessageCounter] = useState(0); // Counter to alternate message display
+
 
   const sendMessage = () => {
     const userObject = {
@@ -113,10 +115,19 @@ const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
       return time;
     };
 
-    stompClient.send(`/app/chat`, JSON.stringify(userObject), {});
     userObject.timeStamp = getTime();
     setMessages((prevMessages) => [...prevMessages, userObject]);
+    stompClient.send(`/app/chat`, JSON.stringify(userObject), {})
+    setDraftMessage('')
     console.log(userObject);
+        setMessageCounter(messageCounter + 1);
+
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
   };
 
   return (
@@ -129,26 +140,66 @@ const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
+          position:'fixed',
+          width:"800px",
         }}
       >
       <h1 className="text-2xl tracking-tight p-2 m-1 text-violet-500" style={{ borderBottom: '2px solid purple' }}>{selectedFriend}</h1>
-        <div className="p-4 flex-grow overflow-y-auto">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={message.senderId === user.username ? 'flex pr-40  items-end justify-end' : 'flex items-start'}
-            >
-              <div
-                className={message.senderId === user.username ? 'bg-purple-200 rounded-lg p-2' : 'bg-pink-200 rounded-lg p-2'}
-              >
-                <p className="text-sm">{message.content}</p>
-                <p className="text-xs bg-violet-200 text-black text-right">{`${message.senderId === user.username ? 'You' : message.senderId}, ${message.timeStamp}`}</p>
-              </div>
-            </div>
-          ))}
+      
+            <div className="p-4 flex-grow overflow-y-auto mb-40">
+          {messages.map((message, index) => {
+            const messageCounter = index + 1;
+
+            if (message.senderId !== user.username &&   messageCounter % 2 === 0) {
+              return (
+                <div
+                  key={message.id}
+                  className={message.senderId === user.username ? 'flex items-end justify-end' : 'flex items-start'}
+                >   {message.senderId !== user.username && (
+                        <img
+                          src={`https://github.com/${message.senderId}.png`}
+                          alt={`${message.senderId}'s avatar`}
+                          className="w-8 h-8 mr-2 rounded-full"
+                        />
+                      )}
+                  <div
+                    className={message.senderId === user.username ? 'bg-purple-400 rounded-lg p-2 m-1' : 'bg-pink-200 rounded-lg p-2 m-1'}
+                  >
+                    <p className="text-sm">{message.content}</p>
+                    <p className="text-xs bg-violet-200 text-black text-right">{`${message.senderId === user.username ? 'You' : message.senderId}, ${message.timeStamp}`}</p>
+                  </div>
+                </div>
+              );
+            } else {
+              return(
+              
+                    <div
+                      key={message.id}
+                      className={message.senderId === user.username ? 'flex items-end justify-end' : 'flex items-start'}
+                    >
+                      <div
+                        className={message.senderId === user.username ? 'bg-purple-400 rounded-lg p-2 m-1' : 'hidden'}
+                      >
+                        <p className="text-sm">{message.content}</p>
+                        <p className="text-xs bg-violet-200 text-black text-right">{`${message.senderId === user.username ? 'You' : message.senderId}, ${message.timeStamp}`}</p>
+                      </div>
+                      {message.senderId === user.username && (
+                        <img
+                          src={`https://github.com/${user.username}.png`}
+                          alt={`${user.username}'s avatar`}
+                          className="w-8 h-8 ml-2 mr-10 rounded-full"
+                        />
+                      )}
+                    
+                  
+                  </div>
+              ) 
+            }
+          })}
         </div>
-        <div >
-          <button className="px-4 py-2 m-1 bg-purple-500 text-white rounded-md" onClick={handleBack}>
+
+        <div style={{ position: 'fixed', bottom: '0', width: '100%', background: '#dcadde', padding: '10px', display: 'flex', alignItems: 'center' }}>
+        <button className="px-4 py-2 m-1 bg-purple-500 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 text-white rounded-md" onClick={handleBack}>
             Back
           </button>
             <input
@@ -161,9 +212,10 @@ const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
               style={{ width:"530px"}}
               className="peer bg-pink-200 h-10 border border-gray-400 text-gray-900 focus:outline-none  rounded-md focus:border-rose-600"
               placeholder=" Enter message"
+              onKeyPress={handleKeyPress}
             />
             
-          <button className="px-4 py-2 m-1 mb-6 bg-purple-500 text-white rounded-md" onClick={sendMessage}>
+            <button className="px-4 py-2 m-1 bg-purple-500 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 text-white rounded-md" onClick={sendMessage}>
             Send
           </button>
         </div>
