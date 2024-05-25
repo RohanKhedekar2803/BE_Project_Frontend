@@ -744,7 +744,7 @@ const Challenge = () => {
                         </div>
                     </>
                 ) : showCreateChallenge=="create" && user.isOrganization==true ?  (<>
-                <CreateChallenge />
+                <CreateChallenge setShowCreateChallenge={setShowCreateChallenge} />
                     </>): showCreateChallenge =="manage" && user.isOrganization==true ? (
                         <ManageChallenges />
                     ) :  showCreateChallenge =="solo" ? (

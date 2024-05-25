@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 
 
-export default function CreateChallenge() {
+export default function CreateChallenge({setShowCreateChallenge}) {
     const { user } = useSelector((state) => state.auth)
 
 
@@ -175,7 +175,7 @@ export default function CreateChallenge() {
 
                                 />
                             </div>
-                            <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
+                            <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about your problem statement.</p>
                         </div>
 
                         <div className="col-span-full">
@@ -383,8 +383,8 @@ export default function CreateChallenge() {
                                     autoComplete="address-level2"
                                     className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 /> */}
-                                                                    <div style={{ paddingLeft:"20px"}}>
-                                    <label style={{ color:"pink" }}>Filter by Topic   :</label>
+                                <div style={{ }}>
+                                    <label style={{ color:"black" }}>Filter by Topic   :</label>
                                     <select style={{ color:"pink", background:"#2a1433" }} id="mySelect" onChange={handleSelecttopicChange} >
                                         <option style={{ color:"pink", background:"#2a1433" }} value="">Select an option</option>
                                         {topicsfilter.map((option, index) => (
@@ -486,7 +486,7 @@ export default function CreateChallenge() {
                 </div> */}
 
                 <div>
-                    <label style={{ color: "pink" }}>Select type of Challenge</label>
+                    <label style={{ color: "black" }}>Select type of Challenge  : </label>
                     <select style={{ color: "pink", background: "#2a1433" }} id="mySelect" onChange={onChange} name='challengeType' value={formData.challengeType}>
                         <option style={{ color: "pink", background: "#2a1433" }} value="">Select an option</option>
                         <option style={{ color: "pink", background: "#2a1433" }} value="isHackathon">Hackathon</option>
@@ -497,10 +497,10 @@ export default function CreateChallenge() {
                 </div>
 
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "40px" }}>
-                    <button type="button" style={{ backgroundColor: "#ccc", padding: "10px 20px", borderRadius: "5px", border: "none", cursor: "pointer", marginRight: "10px" }}>
+                    <button style={{ background:'grey'}} class="px-4 py-2 m-1  hover:bg-grey-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 text-white rounded-md" type="button" onClick={()=>setShowCreateChallenge('all')} >
                         Cancel
                     </button>
-                    <button type="submit" style={{ backgroundColor: "purple", padding: "10px 20px", borderRadius: "5px", color: "white", border: "none", cursor: "pointer" }}>
+                    <button  class="px-4 py-2 m-1 bg-black hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 text-white rounded-md" type="submit" >
                         Save
                     </button>
                 </div>
