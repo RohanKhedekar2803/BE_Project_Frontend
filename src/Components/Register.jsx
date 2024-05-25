@@ -203,6 +203,8 @@
 
 
 // export default Register
+
+
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -240,10 +242,6 @@ const Register = () => {
         dispatch(reset());
     }, [user, isError, isSuccess, navigate, dispatch]);
 
-    // const onFinish = (values) => {
-    //   console.log("values", values)
-    //     dispatch(register(values));
-    // };
     const onFinish = (values) => {
       console.log("values", values);
       const updatedValues = { ...values, isOrganization: formData.isOrganization };
@@ -254,14 +252,6 @@ const Register = () => {
         console.log('Failed:', errorInfo);
     };
 
-    // const handleCheckBox = (e) => {
-    //     setFormData((prevState) => ({
-    //         ...prevState,
-    //         isOrganization: e.target.checked
-    //     }));
-    //     console.log("formData",formData)
-    //     console.log("e.target.checked",e.target.checked)
-    // };
     const handleCheckBox = (e) => {
       const isChecked = e.target.checked;
       setFormData((prevState) => ({
@@ -315,11 +305,7 @@ const Register = () => {
       }}
     >
       <div style={{ textAlign: 'center', marginBottom: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        {/* <img
-          src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-          alt="Your Company"
-          style={{ width: '10rem', marginBottom: '1rem' }} // Add margin for spacing
-        /> */}
+
         <span style={{ fontSize: "35px", color: "rgb(242 215 255)" }}>Register new account</span>
       </div>
       <Form
@@ -329,13 +315,32 @@ const Register = () => {
         layout="vertical"
       >
         <span style={{ fontSize: "15px", color: "white" }}>Username</span>
+        
         <Form.Item
-          // label="Username"
-          name="username"
-          rules={[{ required: true, message: 'Please input your username!' }]}
-        >
-          <Input />
-        </Form.Item>
+  name="username"
+  rules={[
+    { required: true, message: 'Please input your username!' },
+    {
+      validator: async (_, value) => {
+        if (!value) {
+          return Promise.resolve(); // Let required rule handle empty input
+        }
+        try {
+          const response = await fetch(`https://api.github.com/users/${value}`);
+          if (!response.ok) {
+            throw new Error('User not found on GitHub');
+          }
+          return Promise.resolve();
+        } catch (error) {
+          return Promise.reject(error.message);
+        }
+      }
+    }
+  ]}
+>
+  <Input />
+</Form.Item>
+
 
         <span style={{ fontSize: "15px", color: "white" }}>Nickname</span>
         <Form.Item
@@ -348,13 +353,17 @@ const Register = () => {
 
         <span style={{ fontSize: "15px", color: "white" }}>Password</span>
         <Form.Item
-          // label="Password"
           name="password"
-          rules={[{ required: true, message: 'Please input your password!' }]}
+          rules={[
+            { required: true, message: 'Please input your password!' },
+            {
+              pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, 
+              message: 'Password must be at least 8 characters long and include at least one letter and one number'
+            }
+          ]}
         >
           <Input.Password />
         </Form.Item>
-
         <Form.Item>
           <Checkbox
             name="isOrganization"
