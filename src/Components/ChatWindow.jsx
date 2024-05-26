@@ -93,31 +93,61 @@ import React, { useContext, useState , useEffect, useRef } from 'react';
 import { UsernameContext } from '../Context/UsernameContext';
 import { stompClient } from '../Constants/StompClient';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 
 const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
   const [draftMessage, setDraftMessage] = useState('');
   const { user } = useSelector((state) => state.auth);
   const [messageCounter, setMessageCounter] = useState(0); // Counter to alternate message display
 
+  const getTime = () => {
+    const currentDate = new Date();
+    const indiaDateTime = currentDate.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+    const time = indiaDateTime.substring(10);
+    console.log('Current date and time in India:', time);
+    return time;
+  };
+  
+  const saveMessageInDB = async (senderId ,receiverId , chatMessage) =>{
+    try {
+      // Make the POST request using Axios
+      const response = await axios.post(`http://localhost:9005/user/savechat/${senderId}/${receiverId}`, chatMessage, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+            console.log('Response:', response.data);
+            
+
+      if (response.status === 200) {
+        console.log('Message sent successfully:', response.data);
+       
+      } else {
+        console.error('Failed to send message:', response.data);
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+
+  }
 
   const sendMessage = () => {
+console.log('in msg')
+
     const userObject = {
       senderId: user?.username,
       receiverId: selectedFriend,
       content: draftMessage,
     };
 
-    const getTime = () => {
-      const currentDate = new Date();
-      const indiaDateTime = currentDate.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-      const time = indiaDateTime.substring(10);
-      console.log('Current date and time in India:', time);
-      return time;
-    };
+
     var username = user.username
     userObject.timeStamp = getTime();
+
     setMessages((prevMessages) => [...prevMessages, userObject]);
+
     stompClient.send(`/users/${selectedFriend}/queue/messages`, JSON.stringify(userObject), {})
+    saveMessageInDB(userObject.senderId,userObject.receiverId,JSON.stringify(userObject))
     setDraftMessage('')
     console.log(userObject);
         setMessageCounter(messageCounter + 1);
@@ -129,34 +159,45 @@ const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
       sendMessage();
     }
   };
-  const chatContainerRef = useRef(null);
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-    }
-  }, [messages]);
+  // const chatContainerRef = useRef(null);
+  // useEffect(() => {
+  //   if (chatContainerRef.current) {
+  //     chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+  //   }
+  // }, [messages]);
   //
-  useEffect(() => {
+
+  const sortMessages = () => {
+    const sortedMessages = [...messages].sort((a, b) => {
+      return new Date(a.timestamp) - new Date(b.timestamp);
+    });
+    setMessages(sortedMessages);
+  };
+
+  const getMessages = async () => {
+    try {
+      const response = await fetch(`http://localhost:9005/chats/${user.username}/${selectedFriend}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      }
+      const data = await response.json();
+      // for(let i=0;i<data.length;i++){
+        setMessages(data);
+      // }
+
 
   
-    const getFriendsList = async () => {
-      try {
-        const response = await fetch(`http://localhost:9005/user/chats/${user.username}/${selectedFriend}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok.');
-        }
-        const data = await response.json();
-        for(let i=0;i<data.length;i++){
-          setMessages((prevMessages) => [...prevMessages,data[i]]);
-        }
-        console.log(`chats btn ${user.username}/${selectedFriend} are`+ data)
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    getFriendsList()
+      // sortMessages(); // Call the sorting function
+      
+      console.log(`chats btn ${user.username}/${selectedFriend} are`+ messages)
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+  useEffect(() => {
+    getMessages()
    
-  },);
+  },[selectedFriend]);
   //
 
   return (

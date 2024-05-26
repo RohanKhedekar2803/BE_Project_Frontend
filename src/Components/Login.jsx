@@ -205,16 +205,16 @@ const Login = () => {
         setIsLoading(true);
         try {
             await dispatch(login(values));
-            const name = user?.username;
-            const userObject = {
-                senderId: name,
-                content: `user ${name} has joined the chat`
-            };
-            stompClient.send(
-                '/app/user.addUser',
-                JSON.stringify(userObject),
-                {}
-            );
+            // const name = user?.username;
+            // const userObject = {
+            //     senderId: name,
+            //     content: `user ${name} has joined the chat`
+            // };
+            // stompClient.send(
+            //     '/app/user.addUser',
+            //     JSON.stringify(userObject),
+            //     {}
+            // );
         } catch (error) {
             console.error('Error signing in:', error);
             setIsLoading(false);
