@@ -157,7 +157,7 @@ const ChallengeCard = ({ data, setShowCreateChallenge, isFromManage }) => {
     const { user } = useSelector((state) => state.auth);
 
     const updateCard = () => {
-        navigate('/dashboard', { state: { initialData: data } });
+        // navigate('/dashboard', { state: { initialData: data } });
         setShowCreateChallenge("update")
     }
 

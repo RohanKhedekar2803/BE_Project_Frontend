@@ -9,11 +9,13 @@ const UpdateChallenge = ({setShowCreateChallenge}) => {
     const [topicsfilter, setTopics] = useState([]);
 
 
+
     const onChange = (e) => {
         setFormData((prevState) => ({
             ...prevState,
             [e.target.name]: e.target.value
         }))
+
     }
 
     const handleCheckBox = (e) => {

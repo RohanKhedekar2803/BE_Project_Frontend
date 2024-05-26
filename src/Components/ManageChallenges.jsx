@@ -15,7 +15,7 @@ function classNames(...classes) {
 }
 
 
-const ManageChallenges = (setShowCreateChallenge) => {
+const ManageChallenges = ({setShowCreateChallenge}) => {
 
     const [repos, setRepos] = useState([]);
     // const [showCreateChallenge, setShowCreateChallenge] = useState(false);
