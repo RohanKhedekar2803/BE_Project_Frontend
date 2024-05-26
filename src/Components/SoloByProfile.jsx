@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import ManageChallenges from './ManageChallenges';
 import Friends from './Friends';
+import NoDataSVG from './NoDataSvg';
+
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
@@ -245,12 +247,18 @@ const SoloByProfile = () => {
                                     null
                             }
                         <div  style={{ padding: "50px", background: "#ebc9e1", borderRadius: "25px"}} >
-                            {repos.map((item, index) => (
-                                <div key={index} className="mb-4">
-                                    <ChallengeCard data={item} />
+                        {repos.length === 0 ? (
+                                <div style={{ paddingLeft:"100px", maxWidth:"850px"}}>
+                                   <NoDataSVG  />
                                 </div>
-                            ))}
-
+                               
+                            ) : (
+                                repos.map((item, index) => (
+                                    <div key={index} className="mb-4">
+                                        <ChallengeCard data={item} />
+                                    </div>
+                                ))
+                            )}
                         <Pagination nextPage={nextPage} prevPage={prevPage} />
 
                         </div>
