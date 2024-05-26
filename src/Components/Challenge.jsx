@@ -481,6 +481,7 @@ import HackathonsByProfile from './HackathonsByProfile'
 import BountiesByProfile from './BountiesByProfile';
 import HiringByProfile from './HiringByProfile';
 import SoloByProfile from './SoloByProfile';
+import UpdateChallenge from './UpdateChallenge';
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
@@ -492,17 +493,35 @@ const Challenge = () => {
     const [languagesfilter, setLanguages] = useState([]);
     const [topicsfilter, setTopics] = useState([]);
     const [filterBy, setFilterBy] = useState('');
-    
+    const [topic, setTopic] = useState("")
+    const [lang, setLang] = useState("")
+    const [isLang, setIsLang] = useState(false)
+    const [isTopic, setIsTopic] = useState(false)
     const navigate = useNavigate();
     const { user } = useSelector((state) => state.auth)
 
     const nextPage = () => {
         setPage(page + 1);
+        if(isLang){
+            SelectlanguageChange(lang, page + 1)
+        }else if(isTopic){
+            SelecttopicChange(topic, page + 1)
+        }else{
+            fetchData(page + 1)
+        }
     };
 
     const prevPage = () => {
-        if (page > 1) {
+        if (page >= 1) {
             setPage(page - 1);
+
+            if(isLang){
+                SelectlanguageChange(lang, page - 1)
+            }else if(isTopic){
+                SelecttopicChange(topic, page - 1)
+            } else {
+                fetchData(page - 1)
+            }
         }
     };
 
@@ -524,7 +543,7 @@ const Challenge = () => {
     useEffect(() => {
         fetchData(page);
         fetchLanguagesAndTopics();
-    }, [page]);
+    }, [user]);
 
     const fetchLanguagesAndTopics = async () => {
         try {
@@ -539,12 +558,7 @@ const Challenge = () => {
         }
     };
 
-    const handleSelectlanguageChange = async (event) => {
-        const selectedOption = event.target.value;
-        const seleted = selectedOption.substring(1, selectedOption.length - 1);
-        console.log(seleted)
-
-
+    const SelectlanguageChange = async (seleted, pg) => {
         try {
             const response = await axios.post(`http://localhost:9005/challenges/getAllChallengesByProfile/?username=${user.username}&pageNo=${page}`, {
                 hasLanguage: seleted,
@@ -571,14 +585,18 @@ const Challenge = () => {
         } catch (error) {
             console.error('Error calling API:', error);
         }
-    };
 
-    const handleSelecttopicChange = async (event) => {
+    }
+
+    const handleSelectlanguageChange = async (event) => {
         const selectedOption = event.target.value;
         const seleted = selectedOption.substring(1, selectedOption.length - 1);
         console.log(seleted)
+        setLang(seleted)
+        SelectlanguageChange(seleted, 0)
+    };
 
-
+    const SelecttopicChange = async (seleted, pg) => {
         try {
             const response = await axios.post(`http://localhost:9005/challenges/getAllChallengesByProfile/?username=${user.username}&pageNo=${page}`, {
                 hasLanguage: "",
@@ -590,10 +608,28 @@ const Challenge = () => {
         } catch (error) {
             console.error('Error calling API:', error);
         }
+
+    }
+
+    const handleSelecttopicChange = async (event) => {
+        const selectedOption = event.target.value;
+        const seleted = selectedOption.substring(1, selectedOption.length - 1);
+        setTopic(seleted)
+        console.log(seleted)
+
+        SelecttopicChange(seleted, 0)
     };
 
     const handleFilterChange = (event) => {
         const val = event.target.value;
+        if(val == "Languages"){
+            setIsLang(true)
+            setIsTopic(false)
+        }else if(val == "Topics"){
+            setIsTopic(true)
+            setIsLang(false)
+        }
+
         setFilterBy(val);
     };
 
@@ -735,7 +771,7 @@ const Challenge = () => {
                         <div  style={{ padding: "50px", background: "#ebc9e1", borderRadius: "25px"}} >
                             {repos.map((item, index) => (
                                 <div key={index} className="mb-4">
-                                    <ChallengeCard data={item} />
+                                    <ChallengeCard data={item} setShowCreateChallenge={setShowCreateChallenge}/>
                                 </div>
                             ))}
 
@@ -746,7 +782,7 @@ const Challenge = () => {
                 ) : showCreateChallenge=="create" && user.isOrganization==true ?  (<>
                 <CreateChallenge setShowCreateChallenge={setShowCreateChallenge} />
                     </>): showCreateChallenge =="manage" && user.isOrganization==true ? (
-                        <ManageChallenges />
+                        <ManageChallenges setShowCreateChallenge={setShowCreateChallenge}  />
                     ) :  showCreateChallenge =="solo" ? (
                         <SoloByProfile />
                     ) :  showCreateChallenge =="bounty" ? (
@@ -755,6 +791,8 @@ const Challenge = () => {
                         <HiringByProfile />
                     ) :  showCreateChallenge =="hackathon" ? (
                         <HackathonsByProfile />
+                    ) :   showCreateChallenge =="update" ? (
+                        <UpdateChallenge setShowCreateChallenge={setShowCreateChallenge} />
                     ) : null
                 
                 

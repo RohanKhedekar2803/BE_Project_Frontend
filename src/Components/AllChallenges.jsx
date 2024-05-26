@@ -8,6 +8,7 @@ import Cards from './Cards';
 import axios from 'axios';
 import Pagination from './Pagination';
 import ChallengeCard from './ChallengeCard';
+import NoDataSVG from './NoDataSvg'
 
 const AllChallenge = () => {
 
@@ -163,11 +164,18 @@ const AllChallenge = () => {
                             }
 
             <div >
-                        {repos.map((item, index) => ( 
-                            <div key={index} className="mb-4">
-                                <ChallengeCard data={item} />
-                            </div>
-                        ))}
+            {repos.length === 0 ? (
+                                <div style={{ paddingLeft:"100px", maxWidth:"850px"}}>
+                                   <NoDataSVG  />
+                                </div>
+                               
+                            ) : (
+                                repos.map((item, index) => (
+                                    <div key={index} className="mb-4">
+                                        <ChallengeCard data={item} />
+                                    </div>
+                                ))
+                            )}
                     </div>
                     <Pagination nextPage={nextPage} prevPage={prevPage} /> 
 

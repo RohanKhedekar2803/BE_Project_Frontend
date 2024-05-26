@@ -32,10 +32,16 @@ export default function HorizontalCard({ data }) {
                     <Typography variant="h5" color="#8b3a56" className="mb-2 font-bold font-sans-serif">
                         {data?.description}
                     </Typography>
-                    {/* <Typography color="#8b3a56" className="mb-2 font-bold font-sans-serif">
+                    <Typography color="black" className="mb-2 font-bold font-sans-serif">
                         Language : {data?.language}
                     </Typography>
 
+                    <Typography color="black" className="mb-2 font-bold font-sans-serif">
+                        Website :<a href={data?.homepage} target="_blank" rel="noopener noreferrer">
+            {data?.homepage}
+          </a>
+                    </Typography>
+{/* 
                     <div style={{color:"#8b3a56" }} className="w-full flex space-x-4">
                         <Typography color="#8b3a56" className="mb-2 font-bold font-sans-serif flex-grow">
                             Stars : {data?.stars}
@@ -46,10 +52,10 @@ export default function HorizontalCard({ data }) {
                         <Typography color="#8b3a56" className="mb-2 font-bold font-sans-serif flex-grow">
                             Size : {data?.size}
                         </Typography>
-                    </div>
+                    </div> */}
 
 
-                    <a href={data?.url} target="_blank" className="">
+                    {/* <a href={data?.url} target="_blank" className="">
                         <button style={{ background: "#bb6583"}} className=" hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             See More
                         </button>

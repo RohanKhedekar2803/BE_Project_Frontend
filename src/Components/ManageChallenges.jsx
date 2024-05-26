@@ -8,16 +8,19 @@ import ChallengeCard from './ChallengeCard';
 import CreateChallenge from './CreateChallenge';
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
+import NoDataSVG from './NoDataSvg';
+
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
 
 
-const ManageChallenges = () => {
+const ManageChallenges = ({setShowCreateChallenge}) => {
 
     const [repos, setRepos] = useState([]);
-    const [showCreateChallenge, setShowCreateChallenge] = useState(false);
+    // const [showCreateChallenge, setShowCreateChallenge] = useState(false);
     const { user } = useSelector((state) => state.auth)
+    const isFromManage = true;
     const navigate = useNavigate();
 
     const fetchData = async () => {
@@ -45,16 +48,19 @@ const ManageChallenges = () => {
         <div style={{ position: 'fixed', left: '200px', width: 'calc(100% - 200px)', height: '100vh', overflowY: 'auto', paddingBottom:"50px", borderRadius: "25px" }} >
         
             <>
-
-            
-
-
                 <div  style={{ padding: "50px", background: "#ebc9e1", borderRadius: "25px"}} >
-                    {repos.map((item, index) => (
-                        <div key={index} className="mb-4">
-                            <ChallengeCard data={item} />
-                        </div>
-                    ))}
+                {repos.length === 0 ? (
+                                <div style={{ paddingLeft:"100px", maxWidth:"850px"}}>
+                                   <NoDataSVG  />
+                                </div>
+                               
+                            ) : (
+                                repos.map((item, index) => (
+                                    <div key={index} className="mb-4">
+                                        <ChallengeCard setShowCreateChallenge={setShowCreateChallenge} isFromManage={isFromManage} data={item} />
+                                    </div>
+                                ))
+                            )}
 
 
                 </div>
