@@ -191,12 +191,17 @@ const ChallengeCard = ({ data, setShowCreateChallenge, isFromManage }) => {
                 </Typography>
             </div>
             <CardBody style={{ background: "rgb(235 171 193)", color: "#713d71" }} className="p-4 rounded-br-md rounded-bl-md">
-                <Typography variant="h5" color="blue-gray" className="mb-2 font-bold font-sans-serif">
-                    {data.description}
-                </Typography>
-                <Typography variant="h5" color="blue-gray" className="mb-2 font-bold font-sans-serif">
-                    {data.problemStatement}
-                </Typography>
+            <Typography variant="h5" color="gray" className="mb-2 font-bold font-sans-serif">
+    <span className="font-bold font-sans-serif" style={{ color: 'black' }}>Topic - </span>
+    {data.problemStatement}
+</Typography>
+
+
+<Typography variant="h5" color="gray" className="mb-2 font-bold font-sans-serif">
+    <span className="font-bold font-sans-serif" style={{ color: 'black' }}>Description - </span>
+    {data.description}
+</Typography>
+
                 <div style={{ color: "#8b3a56" }} className="w-full flex space-x-4">
                     <Typography color="gray" className="mb-2 font-bold font-sans-serif flex-grow">
                         Organization: {data.nameOfOrganization}

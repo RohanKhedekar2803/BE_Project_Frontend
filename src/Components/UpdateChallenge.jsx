@@ -76,7 +76,7 @@ const UpdateChallenge = ({setShowCreateChallenge}) => {
                         type="text"
                         name="nameOfOrganization"
                         id="nameOfOrganization"
-                        value={formData.nameOfOrganization}
+                        value={formData?.nameOfOrganization}
                         onChange={onChange}
                         autoComplete="given-name"
                         className="block text-purple-600  w-full rounded-md border-0 py-1.5 px-2 text-md shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-400 sm:text-md sm:leading-6"
@@ -93,7 +93,7 @@ const UpdateChallenge = ({setShowCreateChallenge}) => {
                         type="text"
                         name="nameChallenge"
                         id="nameChallenge"
-                        value={formData.nameChallenge}
+                        value={formData?.nameChallenge}
                         onChange={onChange}
 
                         autoComplete="family-name"
@@ -110,7 +110,7 @@ const UpdateChallenge = ({setShowCreateChallenge}) => {
                     <textarea
                         id="problemStatement"
                         name="problemStatement"
-                        value={formData.problemStatement}
+                        value={formData?.problemStatement}
                         onChange={onChange}
 
                         rows={2}
@@ -129,7 +129,7 @@ const UpdateChallenge = ({setShowCreateChallenge}) => {
                     <textarea
                         id="description"
                         name="description"
-                        value={formData.description}
+                        value={formData?.description}
                         onChange={onChange}
 
                         rows={3}
@@ -148,7 +148,7 @@ const UpdateChallenge = ({setShowCreateChallenge}) => {
                     <input
                         id="githubUrl"
                         name="githubUrl"
-                        value={formData.githubUrl}
+                        value={formData?.githubUrl}
                         onChange={onChange}
 
                         type="githubUrl"
@@ -168,7 +168,7 @@ const UpdateChallenge = ({setShowCreateChallenge}) => {
                     <input
                         type="text"
                         name="language"
-                        value={formData.language}
+                        value={formData?.language}
                         onChange={onChange}
 
                         id="language"
@@ -186,7 +186,7 @@ const UpdateChallenge = ({setShowCreateChallenge}) => {
                     <input
                         type="text"
                         name="startDateAndTime"
-                        value={formData.startDateAndTime}
+                        value={formData?.startDateAndTime}
                         onChange={onChange}
 
                         id="startDateAndTime"
@@ -204,7 +204,7 @@ const UpdateChallenge = ({setShowCreateChallenge}) => {
                     <input
                         type="text"
                         name="endDateAndTime"
-                        value={formData.endDateAndTime}
+                        value={formData?.endDateAndTime}
                         onChange={onChange}
 
                         id="endDateAndTime"
@@ -227,7 +227,7 @@ const UpdateChallenge = ({setShowCreateChallenge}) => {
                     <input
                         type="number"
                         name="maxPeopleinTeam"
-                        value={formData.maxPeopleinTeam}
+                        value={formData?.maxPeopleinTeam}
                         onChange={onChange}
 
                         id="maxPeopleinTeam"
@@ -245,7 +245,7 @@ const UpdateChallenge = ({setShowCreateChallenge}) => {
                     <input
                         type="number"
                         name="minPeopleinTeam"
-                        value={formData.minPeopleinTeam}
+                        value={formData?.minPeopleinTeam}
                         onChange={onChange}
 
                         id="minPeopleinTeam"
@@ -263,7 +263,7 @@ const UpdateChallenge = ({setShowCreateChallenge}) => {
                     <input
                         type="number"
                         name="salaryPerYear"
-                        value={formData.salaryPerYear}
+                        value={formData?.salaryPerYear}
                         onChange={onChange}
 
                         id="salaryPerYear"
@@ -284,7 +284,7 @@ const UpdateChallenge = ({setShowCreateChallenge}) => {
                     <input
                         type="text"
                         name="theme"
-                        value={formData.theme}
+                        value={formData?.theme}
                         onChange={onChange}
 
                         id="theme"
@@ -302,7 +302,7 @@ const UpdateChallenge = ({setShowCreateChallenge}) => {
                     <input
                         type="number"
                         name="prize"
-                        value={formData.prize}
+                        value={formData?.prize}
                         onChange={onChange}
 
                         id="prize"
@@ -430,7 +430,7 @@ const UpdateChallenge = ({setShowCreateChallenge}) => {
 
     <div>
         <label style={{ color: "white" }}>Select type of Challenge  : </label>
-        <select style={{ color: "pink", background: "#2a1433" }} id="mySelect" onChange={onChange} name='challengeType' value={formData.challengeType}>
+        <select style={{ color: "pink", background: "#2a1433" }} id="mySelect" onChange={onChange} name='challengeType' value={formData?.challengeType}>
             <option style={{ color: "pink", background: "#2a1433" }} value="">Select an option</option>
             <option style={{ color: "pink", background: "#2a1433" }} value="isHackathon">Hackathon</option>
             <option style={{ color: "pink", background: "#2a1433" }} value="isBounty">Bounty</option>

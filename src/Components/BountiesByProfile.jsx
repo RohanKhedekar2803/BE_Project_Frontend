@@ -81,7 +81,7 @@ const BountiesByProfile = () => {
     const handleSelectlanguageChange = async (event) => {
         const selectedOption = event.target.value;
         const seleted = selectedOption.substring(1, selectedOption.length - 1);
-        console.log(seleted)
+        console.log(selectedOption)
 
 
         try {
@@ -113,14 +113,14 @@ const BountiesByProfile = () => {
 
     const handleSelecttopicChange = async (event) => {
         const selectedOption = event.target.value;
-        const seleted = selectedOption.substring(1, selectedOption.length - 1);
-        console.log(seleted)
+        // const seleted = selectedOption.substring(1, selectedOption.length - 1);
+        console.log(selectedOption)
 
 
         try {
             const response = await axios.post(`http://localhost:9005/challenges/getAllBountyByProfile/?username=${user.username}&pageNo=${page}`, {
                 hasLanguage: "",
-                hasTopic: seleted,
+                hasTopic: selectedOption,
             });
             // Process the API response as needed
             const dataArray = response.data;

@@ -605,6 +605,7 @@ const Challenge = () => {
             const dataArray = response.data;
             setRepos(dataArray);
             console.log("data", dataArray)
+
         } catch (error) {
             console.error('Error calling API:', error);
         }
@@ -613,11 +614,11 @@ const Challenge = () => {
 
     const handleSelecttopicChange = async (event) => {
         const selectedOption = event.target.value;
-        const seleted = selectedOption.substring(1, selectedOption.length - 1);
-        setTopic(seleted)
-        console.log(seleted)
+        // const seleted = selectedOption.substring(1, selectedOption.length - 1);
+        setTopic(selectedOption)
+        console.log(selectedOption)
 
-        SelecttopicChange(seleted, 0)
+        SelecttopicChange(selectedOption, 0)
     };
 
     const handleFilterChange = (event) => {
@@ -640,8 +641,8 @@ const Challenge = () => {
                     <div className="hidden md:block h-16 pt-3">
                         <div className="ml-10 flex items-baseline space-x-4">
                        
-
-                        {user.isOrganization ? (<>
+                        
+                        {user?.isOrganization ? (<>
                             <a
                                 style={{ color: "pink" }}
                                 onClick={() => setShowCreateChallenge("create")} // Adjusted onClick to show CreateChallenge
@@ -779,9 +780,9 @@ const Challenge = () => {
 
                         </div>
                     </>
-                ) : showCreateChallenge=="create" && user.isOrganization==true ?  (<>
+                ) : showCreateChallenge=="create" && user?.isOrganization==true ?  (<>
                 <CreateChallenge setShowCreateChallenge={setShowCreateChallenge} />
-                    </>): showCreateChallenge =="manage" && user.isOrganization==true ? (
+                    </>): showCreateChallenge =="manage" && user?.isOrganization==true ? (
                         <ManageChallenges setShowCreateChallenge={setShowCreateChallenge}  />
                     ) :  showCreateChallenge =="solo" ? (
                         <SoloByProfile />
