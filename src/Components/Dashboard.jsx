@@ -158,29 +158,43 @@ const Dashboard = () => {
     const [topic, setTopic] = useState("")
     const [lang, setLang] = useState("")
     const [isLang, setIsLang] = useState(false)
+    const [isTopic, setIsTopic] = useState(false)
     const [modalVisible, setModalVisible] = useState(false); // State to manage modal visibility
     const [cardData, setCardData] = useState(null); // State to store selected card data
 
     const nextPage = () => {
         setPage(page + 1);
-    };
-
-    const prevPage = () => {
-        if (page > 1) {
-            setPage(page - 1);
+        if(isLang){
+            SelectlanguageChange(lang, page + 1)
+        }else if(isTopic){
+            SelecttopicChange(topic, page + 1)
+        }else{
+            fetchData(page + 1)
         }
     };
 
-    const handleSelectlanguageChange = async (event) => {
-        const selectedOption = event.target.value;
-        const seleted = selectedOption.substring(1, selectedOption.length - 1);
-        setLang(seleted)
-        setIsLang(true)
-        console.log(seleted)
+    const prevPage = () => {
+        if (page >= 1) {
+            setPage(page - 1);
+
+            if(isLang){
+                SelectlanguageChange(lang, page - 1)
+            }else if(isTopic){
+                SelecttopicChange(topic, page - 1)
+            } else {
+                fetchData(page - 1)
+            }
+        }else{
+            toast.error("cannot go to previous page")
+        }
 
 
+    };
+
+    const SelectlanguageChange = async (seleted, pg) => {
+        console.log("page "+pg )
         try {
-            const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}&sortBy=${sortBy}`, {
+            const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${pg}&sortBy=${sortBy}`, {
                 hasLanguage: seleted,
                 hasTopic: "",
             });
@@ -206,17 +220,22 @@ const Dashboard = () => {
         } catch (error) {
             console.error('Error calling API:', error);
         }
+
+    }
+
+    const handleSelectlanguageChange = async (event) => {
+        const selectedOption = event.target.value;
+        const seleted = selectedOption.substring(1, selectedOption.length - 1);
+        setLang(seleted)
+        // setIsLang(true)
+        console.log(seleted)
+        SelectlanguageChange(seleted, 0)
     };
 
-    const handleSelecttopicChange = async (event) => {
-        const selectedOption = event.target.value;
-        // const seleted = selectedOption.substring(1, selectedOption.length - 1);
-        setTopic(selectedOption)
-        setIsLang(false)
-        console.log(selectedOption)
-
+    const SelecttopicChange = async(selectedOption, pg) => {
+        console.log("page "+pg )
         try {
-            const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}&sortBy=${sortBy}`, {
+            const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${pg}&sortBy=${sortBy}`, {
                 hasLanguage: "",
                 hasTopic: selectedOption,
             });
@@ -227,6 +246,16 @@ const Dashboard = () => {
         } catch (error) {
             console.error('Error calling API:', error);
         }
+
+    }
+
+    const handleSelecttopicChange = async (event) => {
+        const selectedOption = event.target.value;
+        // const seleted = selectedOption.substring(1, selectedOption.length - 1);
+        setTopic(selectedOption)
+        // setIsLang(false)
+        console.log(selectedOption)
+        SelecttopicChange(selectedOption, 0)
     };
 
     const handleSortChange = async (event) => {
@@ -281,7 +310,9 @@ const Dashboard = () => {
         const val = event.target.value;
         if(val == "Languages"){
             setIsLang(true)
-        }else{
+            setIsTopic(false)
+        }else if(val == "Topics"){
+            setIsTopic(true)
             setIsLang(false)
         }
 
@@ -293,6 +324,32 @@ const Dashboard = () => {
 
     //   }, [repos])
 
+    const fetchData = async (page) => {
+            
+        try {
+
+            const languages = await axios.get(`http://localhost:9005/utils/getlang`)
+            setLanguages(languages.data)
+            console.log(languages.data)
+
+            const topics = await axios.get(`http://localhost:9005/utils/gettopics`);
+            setTopics(topics.data)
+
+
+            const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}&sortBy=${sortBy}`, {
+                hasLanguage: "",
+                hasTopic: "",
+            });
+
+            console.log('Response:', response.data);
+            const dataArray = response.data.content;
+            setRepos(dataArray);
+            console.log("data: ", dataArray)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
     useEffect(() => {
 
         if(!user){
@@ -300,34 +357,10 @@ const Dashboard = () => {
             navigate('/')
         }
         
-        const fetchData = async (page) => {
-            
-            try {
 
-                const languages = await axios.get(`http://localhost:9005/utils/getlang`)
-                setLanguages(languages.data)
-                console.log(languages.data)
-
-                const topics = await axios.get(`http://localhost:9005/utils/gettopics`);
-                setTopics(topics.data)
-
-
-                const response = await axios.post(`http://localhost:9005/repo/getbyprofile/?username=${user.username}&pageNo=${page}&sortBy=${sortBy}`, {
-                    hasLanguage: "",
-                    hasTopic: "",
-                });
-
-                console.log('Response:', response.data);
-                const dataArray = response.data.content;
-                setRepos(dataArray);
-                console.log("data: ", dataArray)
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
 
         fetchData(page);
-    }, [page, user]);
+    }, [user]);
 
     useEffect(() => {
 
