@@ -132,7 +132,7 @@ const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
   }
 
   const sendMessage = () => {
-console.log('in msg')
+      console.log('in msg')
 
     const userObject = {
       senderId: user?.username,
@@ -147,6 +147,7 @@ console.log('in msg')
     setMessages((prevMessages) => [...prevMessages, userObject]);
 
     stompClient.send(`/users/${selectedFriend}/queue/messages`, JSON.stringify(userObject), {})
+    saveMessageInDB(userObject.senderId,userObject.receiverId,JSON.stringify(userObject))
     saveMessageInDB(userObject.senderId,userObject.receiverId,JSON.stringify(userObject))
     setDraftMessage('')
     console.log(userObject);
@@ -176,27 +177,27 @@ console.log('in msg')
 
   const getMessages = async () => {
     try {
-      const response = await fetch(`http://localhost:9005/chats/${user.username}/${selectedFriend}`);
+      const response = await fetch(`http://localhost:9005/user/chats/${user.username}/${selectedFriend}`);
       if (!response.ok) {
         throw new Error('Network response was not ok.');
       }
       const data = await response.json();
+      
+      
       // for(let i=0;i<data.length;i++){
-        setMessages(data);
+        // setMessages((prevMessages) => [...prevMessages, data[i]]);
+        setMessages(data)
       // }
 
-
-  
-      // sortMessages(); // Call the sorting function
-      
       console.log(`chats btn ${user.username}/${selectedFriend} are`+ messages)
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
   useEffect(() => {
+    setMessages([]);
     getMessages()
-   
+    sortMessages()
   },[selectedFriend]);
   //
 
@@ -235,7 +236,7 @@ console.log('in msg')
             if( (message.senderId === user.username && message.receiverId === selectedFriend) || 
             (message.senderId === selectedFriend && message.receiverId === user.username) ){
 
-              if (message.senderId !== user.username &&   messageCounter % 2 === 0) {
+              if (message.senderId !== user.username && messageCounter %2==1) {
                 return (
                   <div
                     key={message.id}
