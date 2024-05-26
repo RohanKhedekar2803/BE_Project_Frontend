@@ -20,6 +20,7 @@ const ManageChallenges = () => {
     const [repos, setRepos] = useState([]);
     const [showCreateChallenge, setShowCreateChallenge] = useState(false);
     const { user } = useSelector((state) => state.auth)
+    const isFromManage = true;
     const navigate = useNavigate();
 
     const fetchData = async () => {
@@ -47,10 +48,6 @@ const ManageChallenges = () => {
         <div style={{ position: 'fixed', left: '200px', width: 'calc(100% - 200px)', height: '100vh', overflowY: 'auto', paddingBottom:"50px", borderRadius: "25px" }} >
         
             <>
-
-            
-
-
                 <div  style={{ padding: "50px", background: "#ebc9e1", borderRadius: "25px"}} >
                 {repos.length === 0 ? (
                                 <div style={{ paddingLeft:"100px", maxWidth:"850px"}}>
@@ -60,7 +57,7 @@ const ManageChallenges = () => {
                             ) : (
                                 repos.map((item, index) => (
                                     <div key={index} className="mb-4">
-                                        <ChallengeCard data={item} />
+                                        <ChallengeCard isFromManage={isFromManage} data={item} />
                                     </div>
                                 ))
                             )}

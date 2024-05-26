@@ -152,24 +152,28 @@ import {
     Button,
 } from "@material-tailwind/react";
 
-const ChallengeCard = ({ data }) => {
+const ChallengeCard = ({ data, setShowCreateChallenge, isFromManage }) => {
     const navigate = useNavigate();
     const { user } = useSelector((state) => state.auth);
 
     const updateCard = () => {
-        navigate('/updatechallenge', { state: { initialData: data } });
+        navigate('/dashboard', { state: { initialData: data } });
+        setShowCreateChallenge("update")
     }
 
     const deleteCard = async (e) => {
         e.preventDefault();
-        try {
+        const userConfirmed = window.confirm("Are you sure you want to delete?");
+        if (userConfirmed) {
+          try {
             await axios.delete(`http://localhost:9005/challenges/${data.id}`);
             console.log('Deleted resource');
-            window.location.reload();
-        } catch (error) {
-            console.error('Error updating data:', error);
+            setShowCreateChallenge("manage");
+          } catch (error) {
+            console.error('Error deleting data:', error);
+          }
         }
-    }
+      };
 
     if (!data || Object.keys(data).length === 0) {
         return (
@@ -229,9 +233,9 @@ const ChallengeCard = ({ data }) => {
                             See More
                         </button>
                     </a>
-                    {user.isOrganization && (
+                    {isFromManage && (
                         <>
-                            <button onClick={updateCard} style={{ background: "#bb6583" }} className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <button onClick={updateCard} style={{ background: "rgb(251 140 16)" }} className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 Update
                             </button>
                             <button onClick={deleteCard} style={{ background: "red" }} className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">

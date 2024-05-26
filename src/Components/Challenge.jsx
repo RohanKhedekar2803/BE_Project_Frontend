@@ -481,6 +481,7 @@ import HackathonsByProfile from './HackathonsByProfile'
 import BountiesByProfile from './BountiesByProfile';
 import HiringByProfile from './HiringByProfile';
 import SoloByProfile from './SoloByProfile';
+import UpdateChallenge from './UpdateChallenge';
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
@@ -735,7 +736,7 @@ const Challenge = () => {
                         <div  style={{ padding: "50px", background: "#ebc9e1", borderRadius: "25px"}} >
                             {repos.map((item, index) => (
                                 <div key={index} className="mb-4">
-                                    <ChallengeCard data={item} />
+                                    <ChallengeCard data={item} setShowCreateChallenge={setShowCreateChallenge}/>
                                 </div>
                             ))}
 
@@ -755,6 +756,8 @@ const Challenge = () => {
                         <HiringByProfile />
                     ) :  showCreateChallenge =="hackathon" ? (
                         <HackathonsByProfile />
+                    ) :   showCreateChallenge =="update" ? (
+                        <UpdateChallenge setShowCreateChallenge={setShowCreateChallenge} />
                     ) : null
                 
                 
