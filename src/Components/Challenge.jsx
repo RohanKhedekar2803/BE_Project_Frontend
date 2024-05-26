@@ -782,7 +782,7 @@ const Challenge = () => {
                 ) : showCreateChallenge=="create" && user.isOrganization==true ?  (<>
                 <CreateChallenge setShowCreateChallenge={setShowCreateChallenge} />
                     </>): showCreateChallenge =="manage" && user.isOrganization==true ? (
-                        <ManageChallenges />
+                        <ManageChallenges setShowCreateChallenge={setShowCreateChallenge}  />
                     ) :  showCreateChallenge =="solo" ? (
                         <SoloByProfile />
                     ) :  showCreateChallenge =="bounty" ? (

@@ -15,10 +15,10 @@ function classNames(...classes) {
 }
 
 
-const ManageChallenges = () => {
+const ManageChallenges = (setShowCreateChallenge) => {
 
     const [repos, setRepos] = useState([]);
-    const [showCreateChallenge, setShowCreateChallenge] = useState(false);
+    // const [showCreateChallenge, setShowCreateChallenge] = useState(false);
     const { user } = useSelector((state) => state.auth)
     const isFromManage = true;
     const navigate = useNavigate();
@@ -57,7 +57,7 @@ const ManageChallenges = () => {
                             ) : (
                                 repos.map((item, index) => (
                                     <div key={index} className="mb-4">
-                                        <ChallengeCard isFromManage={isFromManage} data={item} />
+                                        <ChallengeCard setShowCreateChallenge={setShowCreateChallenge} isFromManage={isFromManage} data={item} />
                                     </div>
                                 ))
                             )}
