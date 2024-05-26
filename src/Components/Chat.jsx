@@ -87,14 +87,6 @@ const Chat = () => {
           
         });
 
-        // stompClient.subscribe(`/users/f`, (frame) => {
-        //   console.log('Message received from /user/topic:', frame);
-        //   const message = JSON.parse(frame.body);
-        //   message.timeStamp = getTime()
-        //   addNewMessage(message);
-        // }
-        // );
-
         stompClient.onreceipt = (frame) => {
           console.log('Message received', frame);
         };

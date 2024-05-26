@@ -89,7 +89,7 @@
 // export default ChatWindow;
 
 
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState , useEffect, useRef } from 'react';
 import { UsernameContext } from '../Context/UsernameContext';
 import { stompClient } from '../Constants/StompClient';
 import { useSelector, useDispatch } from 'react-redux';
@@ -114,10 +114,10 @@ const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
       console.log('Current date and time in India:', time);
       return time;
     };
-
+    var username = user.username
     userObject.timeStamp = getTime();
     setMessages((prevMessages) => [...prevMessages, userObject]);
-    stompClient.send(`/app/chat`, JSON.stringify(userObject), {})
+    stompClient.send(`/users/${selectedFriend}/queue/messages`, JSON.stringify(userObject), {})
     setDraftMessage('')
     console.log(userObject);
         setMessageCounter(messageCounter + 1);
@@ -129,6 +129,35 @@ const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
       sendMessage();
     }
   };
+  const chatContainerRef = useRef(null);
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+  //
+  useEffect(() => {
+
+  
+    const getFriendsList = async () => {
+      try {
+        const response = await fetch(`http://localhost:9005/user/chats/${user.username}/${selectedFriend}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok.');
+        }
+        const data = await response.json();
+        for(let i=0;i<data.length;i++){
+          setMessages((prevMessages) => [...prevMessages,data[i]]);
+        }
+        console.log(`chats btn ${user.username}/${selectedFriend} are`+ data)
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    getFriendsList()
+   
+  },);
+  //
 
   return (
     <>
@@ -144,57 +173,76 @@ const ChatWindow = ({ selectedFriend, messages, handleBack, setMessages }) => {
           width:"800px",
         }}
       >
-      <h1 className="text-2xl tracking-tight p-2 m-1 text-violet-500" style={{ borderBottom: '2px solid purple' }}>{selectedFriend}</h1>
-      
+
+        <div className='flex mb-1'>
+        <div className='flex items-center justify-center'>
+        { (
+                          <img
+                            src={`https://github.com/${selectedFriend}.png`}
+                            alt={`${selectedFriend}'s avatar`}
+                            className="w-8 h-8 mr-2 rounded-full "
+                          />
+          )}
+        </div>
+          <h1 className="text-2xl ml-1 tracking-tight pb-1 mb-1 text-violet-500" >{selectedFriend}</h1>
+        </div>
+        <hr style={{ color: 'black' }} />
+
             <div className="p-4 flex-grow overflow-y-auto mb-40">
           {messages.map((message, index) => {
             const messageCounter = index + 1;
+            if( (message.senderId === user.username && message.receiverId === selectedFriend) || 
+            (message.senderId === selectedFriend && message.receiverId === user.username) ){
 
-            if (message.senderId !== user.username &&   messageCounter % 2 === 0) {
-              return (
-                <div
-                  key={message.id}
-                  className={message.senderId === user.username ? 'flex items-end justify-end' : 'flex items-start'}
-                >   {message.senderId !== user.username && (
-                        <img
-                          src={`https://github.com/${message.senderId}.png`}
-                          alt={`${message.senderId}'s avatar`}
-                          className="w-8 h-8 mr-2 rounded-full"
-                        />
-                      )}
+              if (message.senderId !== user.username &&   messageCounter % 2 === 0) {
+                return (
                   <div
-                    className={message.senderId === user.username ? 'bg-purple-400 rounded-lg p-2 m-1' : 'bg-pink-200 rounded-lg p-2 m-1'}
-                  >
-                    <p className="text-sm">{message.content}</p>
-                    <p className="text-xs bg-violet-200 text-black text-right">{`${message.senderId === user.username ? 'You' : message.senderId}, ${message.timeStamp}`}</p>
-                  </div>
-                </div>
-              );
-            } else {
-              return(
-              
+                    key={message.id}
+                    className={message.senderId === user.username ? 'flex items-end justify-end' : 'flex items-start'}
+                  >   {message.senderId !== user.username && (
+                          <img
+                            src={`https://github.com/${message.senderId}.png`}
+                            alt={`${message.senderId}'s avatar`}
+                            className="w-8 h-8 mr-2 rounded-full"
+                          />
+                        )}
                     <div
-                      key={message.id}
-                      className={message.senderId === user.username ? 'flex items-end justify-end' : 'flex items-start'}
+                      className={message.senderId === user.username ? 'bg-purple-400 rounded-lg p-2 m-1' : 'bg-pink-200 rounded-lg p-2 m-1'}
                     >
-                      <div
-                        className={message.senderId === user.username ? 'bg-purple-400 rounded-lg p-2 m-1' : 'hidden'}
-                      >
-                        <p className="text-sm">{message.content}</p>
-                        <p className="text-xs bg-violet-200 text-black text-right">{`${message.senderId === user.username ? 'You' : message.senderId}, ${message.timeStamp}`}</p>
-                      </div>
-                      {message.senderId === user.username && (
-                        <img
-                          src={`https://github.com/${user.username}.png`}
-                          alt={`${user.username}'s avatar`}
-                          className="w-8 h-8 ml-2 mr-10 rounded-full"
-                        />
-                      )}
-                    
-                  
+                      <p className="text-sm">{message.content}</p>
+                      <p className="text-xs bg-violet-200 text-black text-right">{`${message.senderId === user.username ? 'You' : message.senderId}, ${message.timeStamp}`}</p>
+                    </div>
                   </div>
-              ) 
+                );
+              } else {
+                return(
+                
+                      <div
+                        key={message.id}
+                        className={message.senderId === user.username ? 'flex items-end justify-end' : 'flex items-start'}
+                      >
+                        <div
+                          className={message.senderId === user.username ? 'bg-purple-400 rounded-lg p-2 m-1' : 'hidden'}
+                        >
+                          <p className="text-sm">{message.content}</p>
+                          <p className="text-xs bg-violet-200 text-black text-right">{`${message.senderId === user.username ? 'You' : message.senderId}, ${message.timeStamp}`}</p>
+                        </div>
+                        {message.senderId === user.username && (
+                          <img
+                            src={`https://github.com/${user.username}.png`}
+                            alt={`${user.username}'s avatar`}
+                            className="w-8 h-8 ml-2 mr-10 rounded-full"
+                          />
+                        )}
+                      
+                    
+                    </div>
+                ) 
+              }
+            }else{
+              console.log(message.senderId +'   '+ message.receiverId)
             }
+
           })}
         </div>
 
